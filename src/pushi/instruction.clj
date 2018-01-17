@@ -1,0 +1,94 @@
+(ns pushi.instruction
+  "This namespace contains function which manage the set of supported
+  instructinos, and the related information such as supported data types."
+  (:require [clojure.spec.alpha :as spec]
+            [pushi.utils :as u]))
+
+
+(def instruction-set
+  "An clojure atom containing a map of all registered instructions. Keys are
+  keywords made from instruction names. Values are maps that conforms to the
+  :pushi.instruction/instruction spec."
+  (atom {}))
+
+
+(spec/def ::name string?)
+(spec/def ::function fn?)
+(spec/def ::input-types (spec/or :type-list sequential? :state keyword?))
+(spec/def ::output-types (spec/or :type-list sequential? :state keyword?))
+(spec/def ::docstring string?)
+(spec/def ::instruction
+  (spec/keys :req-un [::name ::function ::input-types ::output-types]
+             :opt-un [::docstring]))
+
+
+(defn make-instruction
+  "Creates an instruction map that :pushi.instruction/instruction spec.
+  - Name should be a unique string with respect to the other instructions in the instruction set.
+  - Function can be any clojure function.
+  - input-types is either the keyword :STATE or a vector of stack types.
+  - output-types is either the keyword :STATE or a vector of stack types.
+  - docstring (optional) is a string explaining what the instruction does.
+
+  TODO: Write custom instruction documentation page."
+  ([name function input-types output-types]
+    (make-instruction name function input-types output-types "No docstring."))
+  ([name function input-types output-types docstring]
+    {:name name
+     :function function
+     :input-types input-types
+     :output-types output-types
+     :docstring docstring}))
+
+
+(defn register
+  "Given an instruction, or the necessary components to make an instruction,
+  add a key-value pair to the instruction-set atom."
+  ([instruction]
+    (swap! instruction-set assoc (keyword (:name instruction)) instruction))
+  ([name function input-types output-types]
+    (register (make-instruction name function input-types output-types)))
+  ([name function input-types output-types docstring]
+    (register (make-instruction name function input-types output-types docstring))))
+
+
+(defn get-supported-instructions
+  "Returns all (or a subset) of the registered instructions in the
+  instruction-set atom.
+
+  By supplying a collection of types, the resulting set of instructions will be
+  limited to instructions that deal with one or more of the specified types.
+
+  By supplyhing a regex name-pattern, the resulting set of instructions will be
+  filtered down to instructions whose name fits the pattern."
+  ([]
+    (get-supported-instructions :all))
+  ([types]
+    (get-supported-instructions types #".*"))
+  ([types name-pattern]
+    (filter #(and (or (= types :all)
+                      (some (u/ensure-set (:input-types %)) types)
+                      (some (u/ensure-set (:output-types %)) types))
+                  (re-matches name-pattern (:name %)))
+            (vals @instruction-set))))
+
+
+(defn get-supported-types
+  "Returns all of the stack types (input and output) mentioned in the
+  instructions stored in the instruction-set atom."
+  []
+  (filter #(not= % :STATE)
+          (set (flatten (map #(flatten (list (:input-types (second %))
+                                              (:output-types (second %))))
+                             @instruction-set)))))
+
+
+(defn get-instruction
+  "Given an instruction name (either string or keyword) return the instruction
+  map of the corresponding push instruction."
+  [name]
+  (get @instruction-set (if (keyword? name) name (keyword name))))
+
+
+(use
+  '(pushi.instruction numeric common io))

@@ -1,0 +1,5 @@
+{
+ :code (1 2 :integer_add :input_0 :integer_mult)
+ :arity 1
+ :output-types [:integer]
+}
