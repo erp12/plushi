@@ -43,7 +43,8 @@ consider contributing!
 
 ### --format, -f
 
-Denotes the file format to use for communication. Supported formats.
+Denotes the file format to use for communication. Supported formats are given in
+the below table
 
 | format | link                              |
 | ------ | --------------------------------- |
@@ -51,31 +52,31 @@ Denotes the file format to use for communication. Supported formats.
 | edn    | https://github.com/edn-format/edn |
 
 
-### --instruction-set, -i
+### --instruction-set, -I
 
 Returns a serialized object desciribing the instructions which are supported by the interpreter. The serialized list will be encoded using the format specified by `--format`.
 
 The returned serialized object includes instruction names, the types of values they accept as input, and the types of values they produce as output. Users can create program by assembling serialzied programs out of the instructions which are relavent to their system.
 
-### --supported-types, -t
+Requires the `--arity` argument to be specified.
+
+### --supported-types, -T
 
 Returns a serialized list of push types which are supported by the interpreter. The serialized list will be encoded using the format specified by `--format`.
 
-### --run, -r
+### --run, -R
 
 Must be followed by a serialized program. Returns the result of running the program. Result will be returned in the format specified by `--format`.
 
-Requires the `--arity` and `--output-types` argument also be specified.
+Requires the `--inputs` argument also be specified.
 
 ### --arity, -a
 
 Must be followed by a non-negative integer denoting the number of input values that is required to run the program.
 
-### --output-types, -o
+### --inputs, -i
 
-Must be followed by a serialized list of push types. Supported values for push types is given by `--supported-types`. Serialized list must be encoded in the format specified by `--format`.
-
-This list of types specifies which data types the program will be outputing.
+Must be followed by a serialized list of values to use as inputs to the push program.
 
 
 ## Examples
@@ -98,7 +99,7 @@ TLDR:
 1. Fork the official repository.
 2. Create a branch for your contribution.
 3. Make commits (Including tests).
-4. Open a pull requeset and await review and merge.
+4. Open a pull request and await review and merge.
 
 
 ## License

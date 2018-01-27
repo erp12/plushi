@@ -6,7 +6,8 @@
   clojure atom."
   (:require [clojure.spec.alpha :as spec]
             [pushi.instruction :as i]
-            [pushi.utils :as u]))
+            [pushi.utils :as u]
+            [pushi.constraints :as c]))
 
 
 (spec/def ::push-type keyword?)
@@ -18,10 +19,10 @@
   "A map where keys are push types and values are maps that contain a
   corresponding predicate (:pred key) and coerce-ing function (:coerce key)."
   {:list {:pred list? :coerce u/ensure-list}
-   :integer {:pred int? :coerce int}
-   :float {:pred float? :coerce float}
+   :integer {:pred int? :coerce #(int (c/constrain-integer %))}
+   :float {:pred float? :coerce #(float (c/constrain-float %))}
    :boolean {:pred boolean? :coerce boolean}
-   :string {:pred string? :coerce str}})
+   :string {:pred string? :coerce #(str (c/constrain-string %))}})
 
 
 (defn recognize-atom-type

@@ -48,7 +48,7 @@
   [program-json]
   (let [program-map (json/read-str program-json)
         arity (get program-map "arity")
-        output-types (map keyword (get program-map "output_types"))]
+        output-types (map keyword (get program-map "output-types"))]
     (instr-io/register-input-instructions arity)
     {:code (parse-code-vector (get program-map "code"))
      :arity arity
@@ -69,17 +69,40 @@
   serialized program formats are :json and :edn."
   [serialized-program format]
   (cond
-    (= format :json)
+    (= format "json")
     (parse-program-json serialized-program)))
 
 
 (defn parse-inputs
-  [])
+  [serialized-inputs format]
+  (if (= format "json")
+    (json/read-str serialized-inputs)
+    (println "EDN not yet supportd")))
 
 
 (defn encode-instruction-set
-  [])
+  [arity format]
+  (instr-io/register-input-instructions arity)
+  (let [instruction-set (vec (map #(-> (assoc % :name (str "pushi:" (:name %)))
+                                       (dissoc :function))
+                                  (instr/get-supported-instructions)))]
+    (if (= format "json")
+      (json/write-str instruction-set)
+      (println "EDN not yet supportd"))))
+
+
+(defn encode-supported-types
+  [format]
+  (cond
+    (= format "json")
+    (json/write-str (instr/get-supported-types))
+
+    (= format "edn")
+    (println "EDN not yet supportd")))
 
 
 (defn encode-outputs
-  [])
+  [output-vals format]
+  (if (= format "json")
+    (json/write-str output-vals)
+    (println "EDN not yet supportd")))

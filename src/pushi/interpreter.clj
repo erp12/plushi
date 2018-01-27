@@ -3,7 +3,8 @@
   (:require [pushi.instruction :as instr]
             [pushi.atoms :as a]
             [pushi.state :as state]
-            [pushi.utils :as u]))
+            [pushi.utils :as u]
+            [pushi.constraints :as c]))
 
 
 (def stack-types
@@ -140,7 +141,8 @@
                      (load-program program)
                      (load-inputs inputs))
            steps 0]
-      (if (empty? (:exec state))
+      (if (or (empty? (:exec state))
+              (> steps (:atom-limit @c/lang-constraints)))
         (do
           (if verbose
             (do
