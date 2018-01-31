@@ -50,18 +50,22 @@
 
 (defn insert-item
   "Returns a copy of the state with the valued inserted into the specified stack
-  at the specified position."
+  at the specified position. If the position is beyond the "
   [state stack-type position value]
-  (let [head (take position ((keyword stack-type) state))
-        tail (drop position ((keyword stack-type) state))]
-    (assoc state (keyword stack-type) (concat head (list value) tail))))
+  (let [stack-kw (keyword stack-type)
+        head (take position (stack-kw state))
+        tail (drop position (stack-kw state))]
+    (assoc state stack-kw (concat head (list value) tail))))
 
 
 (defn assoc-item
   "Retuns a copy of the state where the value at the specified position in the
   specified stack is replaced with the given value."
   [state stack-type position value]
-  (assoc-in state [(keyword stack-type) position] value))
+  (let [stack-kw (keyword stack-type)
+        head (take position (stack-kw state))
+        tail (drop (inc position) (stack-kw state))]
+    (assoc state stack-kw (concat head (list value) tail))))
 
 
 (defn flush-stack

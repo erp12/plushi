@@ -2,7 +2,8 @@ Things to do before initial release
 ===================================
 
 - [ ] Parse out instruction documentation
-- [ ] Write introduction documentation
+- [x] Write introduction documentation
+- [ ] Instruction set unit tests
 
 - [ ] Push program execution timeout
 - [ ] More instructions

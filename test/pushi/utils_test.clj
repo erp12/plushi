@@ -2,10 +2,6 @@
   (:require [clojure.test :refer :all]
             [pushi.utils :refer :all]))
 
-; (deftest a-test
-;   (testing "FIXME, I fail."
-;     (is (= 0 1))))
-
 
 (deftest vector-to-list-stndrd
   (testing "Convert a vector to a list"
@@ -23,3 +19,33 @@
   (testing "Ensure list, single element"
     (is (= (ensure-list 5)
            '(5)))))
+
+
+(deftest ensure-list-coll
+  (testing "Ensure list, some collection"
+    (is (= (ensure-list #{1 2 3})
+           '(2 3 1)))))
+
+
+(deftest ensure-vector-single
+  (testing "Ensure vector, single element"
+    (is (= (ensure-vector 5)
+           [5]))))
+
+
+(deftest ensure-vector-from-list
+  (testing "Ensure vector, list"
+    (is (= (ensure-vector '(1 2 3))
+           [1 2 3]))))
+
+
+(deftest ensure-vector-from-set
+  (testing "Ensure vector, set"
+    (is (= (ensure-vector #{1 2 3})
+           [1 3 2]))))
+
+
+(deftest keyword-to-str-stndrd
+  (testing "Standard call to keyword-to-str"
+    (is (= (keyword-to-str :foo)
+           "foo"))))

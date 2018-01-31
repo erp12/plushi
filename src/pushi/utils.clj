@@ -36,6 +36,7 @@
   (cond
     (vector? x) x
     (sequential? x) (vec x)
+    (coll? x) (into [] x)
     :else (vector x)))
 
 
