@@ -5,7 +5,8 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.9.0"]
                  [org.clojure/data.json "0.2.6"]
-                 [org.clojure/tools.cli "0.3.5"]]
+                 [org.clojure/tools.cli "0.3.5"]
+                 [hiccup "1.0.5"]]
   :plugins [[lein-codox "0.10.3"]]
   :main ^:skip-aot pushi.core
   :target-path "target/%s"

@@ -18,6 +18,7 @@
     :validate [int?]]
    ["-i" "--inputs INPUT-LIST" "Pass list of serialized input values to program."
     :default []]
+   ["-d" "--docs PATH" "Generates an html file documenting the instruction set."]
    ["-h" "--help"]])
 
 
@@ -84,4 +85,11 @@
             outputs (i/run-push (:code program)
                                 inputs
                                 (:output-types program))]
-        (println (e/encode-outputs outputs (:format cli-opts)))))))
+        (println (e/encode-outputs outputs (:format cli-opts))))
+
+      ;; If the user is generating instruction set documentation
+      (not (nil? (:docs cli-opts)))
+      (e/encode-instruction-set-docs (:docs cli-opts))
+
+      :else
+      (throw (Exception. "Must supply a valid option. See --help.")))))

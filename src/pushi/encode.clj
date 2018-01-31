@@ -5,6 +5,7 @@
   (:require [clojure.edn :as edn]
             [clojure.data.json :as json]
             [clojure.string :as str]
+            [hiccup.core :as h]
             [pushi.instruction :as instr]
             [pushi.instruction.io :as instr-io]
             [pushi.utils :as u]))
@@ -106,3 +107,11 @@
   (if (= format "json")
     (json/write-str output-vals)
     (println "EDN not yet supportd")))
+
+
+(defn encode-instruction-set-docs
+  [path]
+  (spit path
+        (h/html [:ul
+                 (for [i (vals @instr/instruction-set)]
+                   [:li (:name i)])])))
