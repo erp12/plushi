@@ -87,7 +87,7 @@
   "Given an instruction name (either string or keyword) return the instruction
   map of the corresponding push instruction."
   [name]
-  (get @instruction-set (if (keyword? name) name (keyword name))))
+  (get @instruction-set (keyword name)))
 
 
 (use

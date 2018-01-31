@@ -12,7 +12,7 @@ To read more about the push language, see the [Push Redux](https://erp12.github.
 
 ## Installation
 
-Download from http://example.com/FIXME.
+Download from https://github.com/erp12/pushi/releases.
 
 For easy integration with Clojure projects, a public clojars release coming soon!
 
@@ -21,13 +21,22 @@ For easy integration with Clojure projects, a public clojars release coming soon
 
 ### Standalone
 
-FIXME: explanation
+Currently, pushi is a tool that is meant to be used as a standalone jar, however
+it is expected that this will most commonly be done via system calls from inside
+other programs.
 
-    $ java -jar pushi-0.1.0-standalone.jar [args]
+$ java -jar pushi-0.1.0-standalone.jar [args]
+
+Send complex data structures to pushi from another context, serialized data
+sturctures such as JSON and EDN are used. For more information on how to used
+the pushi standalone with various arguments, see the Options section of the
+README and the introduction documentation topic.
+
 
 ### Clojure
 
-Pushi can also be used as a Clojure library for easy integration with Clojure projects. For more information see with documentation on this exact topic.
+Pushi can also be used as a Clojure library for easy integration with Clojure
+projects. For more information see with documentation on this topic.
 
 ### Python
 
@@ -41,24 +50,13 @@ consider contributing!
 
 ## Options
 
-### --format, -f
-
-Denotes the file format to use for communication. Supported formats are given in
-the below table
-
-| format | link                              |
-| ------ | --------------------------------- |
-| json   | https://www.json.org/             |
-| edn    | https://github.com/edn-format/edn |
-
-
 ### --instruction-set, -I
 
 Returns a serialized object desciribing the instructions which are supported by the interpreter. The serialized list will be encoded using the format specified by `--format`.
 
 The returned serialized object includes instruction names, the types of values they accept as input, and the types of values they produce as output. Users can create program by assembling serialzied programs out of the instructions which are relavent to their system.
 
-Requires the `--arity` argument to be specified.
+To include instructions which processs inputs, the `--arity` argument must be specified.
 
 ### --supported-types, -T
 
@@ -69,6 +67,16 @@ Returns a serialized list of push types which are supported by the interpreter. 
 Must be followed by a serialized program. Returns the result of running the program. Result will be returned in the format specified by `--format`.
 
 Requires the `--inputs` argument also be specified.
+
+### --format, -f
+
+Denotes the file format to use for communication. Supported formats are given in
+the below table
+
+| format | link                              |
+| ------ | --------------------------------- |
+| json   | https://www.json.org/             |
+| edn    | https://github.com/edn-format/edn |
 
 ### --arity, -a
 
