@@ -19,11 +19,16 @@
 (defn- register-basic-math
   [type-kw]
   (let [type-str (name type-kw)]
-    (i/register (str type-str "_add") + [type-kw type-kw] [type-kw])
-    (i/register (str type-str "_sub") - [type-kw type-kw] [type-kw])
-    (i/register (str type-str "_mult") * [type-kw type-kw] [type-kw])
-    (i/register (str type-str "_div") p-div [type-kw type-kw] [type-kw])
-    (i/register (str type-str "_mod") p-mod [type-kw type-kw] [type-kw])
+    (i/register (str type-str "_add") + [type-kw type-kw] [type-kw]
+                (str "Adds the top two " type-str "s and pushes the result."))
+    (i/register (str type-str "_sub") - [type-kw type-kw] [type-kw]
+                (str "Subtracts the top two " type-str "s and pushes the result."))
+    (i/register (str type-str "_mult") * [type-kw type-kw] [type-kw]
+                (str "Multiplies the top two " type-str "s and pushes the result."))
+    (i/register (str type-str "_div") p-div [type-kw type-kw] [type-kw]
+                (str "Divides the top two " type-str "s and pushes the result."))
+    (i/register (str type-str "_mod") p-mod [type-kw type-kw] [type-kw]
+                (str "Computes the modulous of the top two " type-str "s and pushes the result."))
     (i/register (str type-str "_min") min [type-kw type-kw] [type-kw])
     (i/register (str type-str "_max") max [type-kw type-kw] [type-kw])
     (i/register (str type-str "_inc") inc [type-kw type-kw] [type-kw])

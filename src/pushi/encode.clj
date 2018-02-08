@@ -6,6 +6,7 @@
             [clojure.data.json :as json]
             [clojure.string :as str]
             [hiccup.core :as h]
+            [hiccup.page :as hp]
             [pushi.instruction :as instr]
             [pushi.instruction.io :as instr-io]
             [pushi.utils :as u]))
@@ -112,6 +113,12 @@
 (defn encode-instruction-set-docs
   [path]
   (spit path
-        (h/html [:ul
-                 (for [i (vals @instr/instruction-set)]
-                   [:li (:name i)])])))
+        (hp/html5 [:head (hp/include-css "css/default.css")]
+                  [:body
+                   [:div#content.namespace-docs
+                      (list [:h2#top.anchor "Pushi Instruction Set"]
+                            [:pre.doc "Documentation on the supported instructions of the pushi interpreter."]
+                            (for [i (vals @instr/instruction-set)]
+                              [:div#var-image.public.anchor
+                                (list [:h3 (:name i)]
+                                      [:pre.doc (:docstring i)])]))]])))
