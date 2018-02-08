@@ -115,14 +115,17 @@
   (spit path
         (hp/html5 [:head (hp/include-css "css/default.css")]
                   [:body
-                   [:div#content.namespace-docs
-                      {:style "left:0px;"}
-                      (list [:h2#top.anchor "Pushi Instruction Set"]
+                   (list
+                     [:div#header
+                      [:h1
+                       [:a {:href "index.html"}
+                        [:span.project-title
+                         [:span.project-name "Pushi Documentation"]]]]]
+                     [:div#content.namespace-docs {:style "left:0px;"}
+                      (list [:h2#top.anchor "Instruction Set"]
                             [:pre.doc "Documentation on the supported instructions of the pushi interpreter."]
-                            [:a {:href "https://erp12.github.io/pushi/index.html"}
-                                "Return to Pushi documentation."]
                             (for [i (sort #(compare (:name %1) (:name %2))
                                           (vals @instr/instruction-set))]
                               [:div#var-image.public.anchor
                                 (list [:h3 (:name i)]
-                                      [:pre.doc (:docstring i)])]))]])))
+                                      [:pre.doc (:docstring i)])]))])])))
