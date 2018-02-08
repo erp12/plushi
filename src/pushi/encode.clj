@@ -119,6 +119,8 @@
                       {:style "left:0px;"}
                       (list [:h2#top.anchor "Pushi Instruction Set"]
                             [:pre.doc "Documentation on the supported instructions of the pushi interpreter."]
+                            [:a {:href "https://erp12.github.io/pushi/index.html"}
+                                "Return to Pushi documentation."]
                             (for [i (sort #(compare (:name %1) (:name %2))
                                           (vals @instr/instruction-set))]
                               [:div#var-image.public.anchor
