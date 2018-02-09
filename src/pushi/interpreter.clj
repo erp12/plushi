@@ -26,7 +26,6 @@
   (assoc state :inputs (u/ensure-vector inputs)))
 
 
-; TODO: What if there aren't items on the given stack?
 (defn inspect-outputs
   "Given a state and a list of stack types, returns a vector of values copied
   from the corresponding stacks of the state. If multiple instances of the same
@@ -47,7 +46,6 @@
                  (assoc type-counts type-to-output 1)))))))
 
 
-; TODO: What if there aren't enough arguments?
 (defn pop-arguments
   "Given a push state and a vector of stack types, return the following:
     1. The push state the top items for each arg-type popped off.
@@ -58,9 +56,12 @@
          args []]
     (if (empty? remaining-arg-types)
       [s args]
-      (recur (rest remaining-arg-types)
-             (state/pop-item s (first remaining-arg-types))
-             (conj args (state/top-item s (first remaining-arg-types)))))))
+      (let [arg (state/top-item s (first remaining-arg-types))]
+        (if (= arg :NO-STACK-ITEM)
+          [state :REVERT]
+          (recur (rest remaining-arg-types)
+                 (state/pop-item s (first remaining-arg-types))
+                 (conj args arg)))))))
 
 
 (defn push-returns
@@ -69,7 +70,9 @@
   returned values can be coerced into their expected stack type and push them
   onto the stack. Return the resulting stack."
   [state returned-values expected-types]
-  (let [items-to-push (map a/coerce-atom-type returned-values expected-types)]
+  (let [items-to-push (map #(if (contains? a/type-lookup %2) (a/coerce-atom-type %1 %2) %1)
+                           returned-values
+                           expected-types)]
     (loop [remaining-items items-to-push
            remaining-types expected-types
            s state]
@@ -106,13 +109,17 @@
         ;; new state.
         (= :STATE (:output-types atom))
           (let [[state-no-args args] (pop-arguments state (:input-types atom))]
-            (apply (:function atom) args))
+            (if (= :REVERT args)
+              state
+              (apply (:function atom) args)))
 
         ;; If instruction takes arguments from stacks and returns values
         ;; to push.
         :else
         (let [[state-no-args args] (pop-arguments state (:input-types atom))
-              returned-values (u/ensure-vector (apply (:function atom) args))]
+              returned-values (if (= :REVERT args)
+                                :REVERT
+                                (u/ensure-vector (apply (:function atom) args)))]
           (if (= :REVERT returned-values)
             state
             (push-returns state-no-args

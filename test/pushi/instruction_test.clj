@@ -21,7 +21,7 @@
 (deftest get-supported-instructions-type
   (testing "Get vector of all integer instructions"
     (is (= (count (get-supported-instructions [:integer]))
-           16))))
+           17))))
 
 
 (deftest get-supported-instructions-name-pattern

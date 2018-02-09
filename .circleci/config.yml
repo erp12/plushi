@@ -1,0 +1,22 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/pushi
+    docker:
+      - image: circleci/clojure:lein-2.7.1
+    environment:
+          JVM_OPTS: -Xmx3200m
+          LEIN_ROOT: nbd
+    steps:
+      - checkout
+      - restore_cache:
+          key: pushi-{{ checksum "project.clj" }}
+      - run: lein deps
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: pushi-{{ checksum "project.clj" }}
+      - run: lein do test, uberjar
+      - store_artifacts:
+          path: target/uberjar/cci-demo-clojure.jar
+          destination: uberjar
