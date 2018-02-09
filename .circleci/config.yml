@@ -1,5 +1,6 @@
 version: 2
 jobs:
+
   deps:
     working_directory: ~/pushi
     docker:
@@ -14,6 +15,7 @@ jobs:
           paths:
             - ~/.m2
           key: pushi-{{ checksum "project.clj" }}
+
   test:
     working_directory: ~/pushi
     docker:
@@ -26,6 +28,7 @@ jobs:
       - restore_cache:
           key: pushi-{{ checksum "project.clj" }}
       - lein test
+
   build:
     working_directory: ~/pushi
     docker:
@@ -41,14 +44,15 @@ jobs:
       - store_artifacts:
           path: target/uberjar/cci-demo-clojure.jar
           destination: uberjar
+
 workflows:
   version: 2
   deps_then_test_and_build:
     jobs:
       - deps
-      - test
+      - test:
           requires:
             - deps
-      - build
+      - build:
           requires:
             - deps
