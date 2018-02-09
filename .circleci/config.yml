@@ -27,7 +27,7 @@ jobs:
       - checkout
       - restore_cache:
           key: pushi-{{ checksum "project.clj" }}
-      - lein do test
+      - run: lein test
 
   build:
     working_directory: ~/pushi
