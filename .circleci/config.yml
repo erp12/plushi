@@ -41,3 +41,14 @@ jobs:
       - store_artifacts:
           path: target/uberjar/cci-demo-clojure.jar
           destination: uberjar
+workflows:
+  version: 2
+  deps_then_test_and_build:
+    jobs:
+      - deps
+      - test
+          requires:
+            - deps
+      - build
+          requires:
+            - deps
