@@ -83,7 +83,6 @@
                (state/push-item s (first remaining-types) (first remaining-items)))))))
 
 
-; TODO: Keep numbers reasonable.
 (defn- evaluate-atom
   [state atom]
   (let [atom-type (a/recognize-atom-type atom)]
@@ -118,9 +117,9 @@
         :else
         (let [[state-no-args args] (pop-arguments state (:input-types atom))
               returned-values (if (= :REVERT args)
-                                :REVERT
+                                [:REVERT]
                                 (u/ensure-vector (apply (:function atom) args)))]
-          (if (= :REVERT returned-values)
+          (if (= :REVERT (first returned-values))
             state
             (push-returns state-no-args
                           returned-values
