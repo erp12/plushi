@@ -110,3 +110,20 @@
                           (s/push-item :integer 5))
                       (:integer_max @instruction-set))
            {:integer '(5) :float '() :stdout "" :inputs []}))))
+
+
+(deftest float_inc_stndrd
+  (testing "float inc standard"
+    (is (= (eval-atom (-> ut-state
+                          (s/push-item :float 4.5))
+                      (:float_inc @instruction-set))
+           {:integer '() :float '(5.5) :stdout "" :inputs []}))))
+
+
+
+(deftest integer_dec_stndrd
+  (testing "integer dec standard"
+    (is (= (eval-atom (-> ut-state
+                          (s/push-item :integer -3))
+                      (:integer_dec @instruction-set))
+           {:integer '(-4) :float '() :stdout "" :inputs []}))))

@@ -33,9 +33,9 @@
                 (str "Pushes the minimum of two " type-str))
     (i/register (str type-str "_max") max [type-kw type-kw] [type-kw]
                 (str "Pushes the maximum of two " type-str))
-    (i/register (str type-str "_inc") inc [type-kw type-kw] [type-kw]
+    (i/register (str type-str "_inc") inc [type-kw] [type-kw]
                 (str "Increments the top " type-str " by 1."))
-    (i/register (str type-str "_dec") dec [type-kw type-kw] [type-kw]
+    (i/register (str type-str "_dec") dec [type-kw] [type-kw]
                 (str "Decrements the top " type-str " by 1."))
     (i/register (str type-str "_lt") < [type-kw type-kw] [:boolean]
                 (str "Pushes true if the top " type-str " is less than the second. Pushes false otherwise."))
