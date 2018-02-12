@@ -9,6 +9,8 @@
   [["-I" "--instruction-set" "Get serialized list of supported instructions."]
    ["-T" "--supported-types" "Get serialized list of supported types."]
    ["-R" "--run PROGRAM" "Run a push program."]
+   ["-D" "--dataset DATASET" "Pass serialized dataset of input values to program."
+    :default []]
    ["-f" "--format FORMAT" "Data format"
     :default "json"
     :validate [#(or (= % "json") (= % "edn")) "Invalid data format option"]]
@@ -16,8 +18,6 @@
     :default 0
     :parse-fn #(Integer/parseInt %)
     :validate [int?]]
-   ["-i" "--inputs INPUT-LIST" "Pass list of serialized input values to program."
-    :default []]
    ["-d" "--docs PATH" "Generates an html file documenting the instruction set."]
    ["-h" "--help"]])
 

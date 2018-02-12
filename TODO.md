@@ -9,3 +9,4 @@ Things to do before initial release
 - [ ] More instructions
 - [ ] Change input to a dataset
 - [ ] Add CLI instruction set filtering args
+- [ ] Add simplification

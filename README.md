@@ -68,6 +68,10 @@ Must be followed by a serialized program. Returns the result of running the prog
 
 Requires the `--inputs` argument also be specified.
 
+### --dataset, -D
+
+Must be followed by a serialized dataset of inputs to the push program. Serialization should be in the format specified by `--format`.
+
 ### --format, -f
 
 Denotes the file format to use for communication. Supported formats are given in
@@ -81,10 +85,6 @@ the below table
 ### --arity, -a
 
 Must be followed by a non-negative integer denoting the number of input values that is required to run the program.
-
-### --inputs, -i
-
-Must be followed by a serialized list of values to use as inputs to the push program.
 
 
 ## Examples
