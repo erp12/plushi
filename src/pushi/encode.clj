@@ -45,7 +45,6 @@
                  (conj code serialized-atom)))))))
 
 
-
 (defn- parse-program-json
   [program-json]
   (let [program-map (json/read-str program-json)
@@ -59,11 +58,16 @@
 
 (defn- parse-program-edn
  [program-edn]
- )
+ (let [program-map (edn/read-string program-edn)
+       arity (:arity program-map)]
+   (instr-io/register-input-instructions arity)
+   {:code (parse-code-vector (:code program-map))
+    :arity arity
+    :output-types (:output-types program-map)}))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; PUBLIC FUNCTIONS
+;; PUBLIC FUNCTIONS
 
 ; TODO: Check all required instructions exist.
 (defn parse-program
@@ -72,25 +76,40 @@
   [serialized-program format]
   (cond
     (= format "json")
-    (parse-program-json serialized-program)))
+    (parse-program-json serialized-program)
+
+    (= format "edn")
+    (parse-program-edn serialized-program)))
 
 
 (defn parse-inputs
   [serialized-inputs format]
-  (if (= format "json")
+  (cond
+    (= format "json")
     (json/read-str serialized-inputs)
-    (println "EDN not yet supportd")))
+
+    (= format "edn")
+    (edn/read-string serialized-inputs)))
 
 
 (defn encode-instruction-set
   [arity format]
   (instr-io/register-input-instructions arity)
-  (let [instruction-set (vec (map #(-> (assoc % :name (str "pushi:" (:name %)))
-                                       (dissoc :function))
-                                  (instr/get-supported-instructions)))]
-    (if (= format "json")
-      (json/write-str instruction-set)
-      (println "EDN not yet supportd"))))
+  (let [instruction-set (cond
+                          (= format "json")
+                          (vec (map #(-> (assoc % :name (str "pushi:" (:name %)))
+                                         (dissoc :function))
+                                    (instr/get-supported-instructions)))
+
+                          (= format "edn")
+                          (vec (map #(dissoc % :function)
+                                    (instr/get-supported-instructions))))]
+      (cond
+        (= format "json")
+        (json/write-str instruction-set)
+
+        (= format "edn")
+        (pr-str instruction-set))))
 
 
 (defn encode-supported-types
@@ -100,14 +119,17 @@
     (json/write-str (instr/get-supported-types))
 
     (= format "edn")
-    (println "EDN not yet supportd")))
+    (pr-str (instr/get-supported-types))))
 
 
 (defn encode-outputs
   [output-vals format]
-  (if (= format "json")
+  (cond
+    (= format "json")
     (json/write-str output-vals)
-    (println "EDN not yet supportd")))
+
+    (= format "edn")
+    (pr-str output-vals)))
 
 
 (defn encode-instruction-set-docs

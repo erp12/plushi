@@ -40,11 +40,11 @@
       (throw (Exception. "When running programs --format, and --inputs must be specified.")))))
 
 
-;;; Used for faster development.
+;; Used for faster development.
 ; (defn -main
 ;   "I don't do a whole lot ... yet."
 ;   [& args]
-;   (let [program (e/parse-program (slurp "resources/scratch.json") "json")]
+;   (let [program (e/parse-program (slurp "resources/simple_program.edn") "edn")]
 ;     (println program)
 ;     (-> (i/run-push (:code program) [] (:output-types program) true)
 ;         (println))))
