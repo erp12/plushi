@@ -150,4 +150,8 @@
                                           (vals @instr/instruction-set))]
                               [:div#var-image.public.anchor
                                 (list [:h3 (:name i)]
-                                      [:pre.doc (:docstring i)])]))])])))
+                                      [:div.usage
+                                       [:code (str "Input Types: " (pr-str (:input-types i)))]
+                                       [:code (str "Output Types: " (pr-str (:output-types i)))]]
+                                      [:div.doc
+                                       [:pre.plaintext (:docstring i)]])]))])])))
