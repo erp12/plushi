@@ -36,7 +36,7 @@
 
     (:run cli-opts)
     (if (or (nil? (:format cli-opts))
-            (nil? (:inputs cli-opts)))
+            (nil? (:dataset cli-opts)))
       (throw (Exception. "When running programs --format, and --inputs must be specified.")))))
 
 
@@ -78,12 +78,12 @@
 
       ;; If the user is running  push program.
       (not (nil? (:run cli-opts)))
-      (let [dataset (e/parse-input-dataset (:inputs cli-opts)
+      (let [dataset (e/parse-input-dataset (:dataset cli-opts)
                                            (:format cli-opts))
             program (e/parse-program (:run cli-opts)
                                      (:format cli-opts))
             f #(i/run-push (:code program) % (:output-types program))
-            outputs (vec (map f dataset))]
+            outputs (vec (map f (:data dataset)))]
         (println (e/encode-outputs outputs (:format cli-opts))))
 
       ;; If the user is generating instruction set documentation
