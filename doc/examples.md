@@ -1,4 +1,6 @@
-# Pushi Usage From Bash
+# Examples of Pushi Usage
+
+## From Bash
 
 For this example, we will assume that our dataset and push program have been serialized in JSON format and are stored in a file on disk.
 
@@ -28,7 +30,7 @@ Say the `data.json` file has the following contents:
 
 The goal of this example is to show how we get the output of the program in `program.json` on each data case in `data.json`.
 
-## 1. Preprocess Data
+### 1. Preprocess Data
 
 When we read the JSON files we must remove newlines or there will be parsing errors. Here this is done with `tr`.
 
@@ -37,7 +39,7 @@ prog=`cat simple_program.json | tr -d '[:space:]'`
 data=`cat data.json | tr -d '[:space:]'`
 ```
 
-## 2. Run Pushi
+### 2. Run Pushi
 
 We specify the run (`-R`), dataset (`-D`), and format (`-f`) flags in our call to Pushi.
 
@@ -53,7 +55,7 @@ The output should look like the following:
 [[0],[0],[2],[3],[4],[6],[8]]
 ```
 
-## Overview
+### Overview
 
 ```sh
 prog=`cat simple_program.json | tr -d '[:space:]'`
@@ -61,3 +63,13 @@ data=`cat data.json | tr -d '[:space:]'`
 
 java -jar pushi.jar -R $prog -D $data -f json
 ```
+
+
+## From Python
+
+Write me!
+
+
+## From Clojure
+
+Write me!
