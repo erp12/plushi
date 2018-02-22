@@ -9,7 +9,8 @@
             [hiccup.page :as hp]
             [pushi.instruction :as instr]
             [pushi.instruction.io :as instr-io]
-            [pushi.utils :as u]))
+            [pushi.utils :as u]
+            [pushi.dataset.json :as json-dataset]))
 
 
 (defn- parse-code-vector
@@ -82,11 +83,11 @@
     (parse-program-edn serialized-program)))
 
 
-(defn parse-inputs
+(defn parse-input-dataset
   [serialized-inputs format]
   (cond
     (= format "json")
-    (json/read-str serialized-inputs)
+    (json-dataset/json-to-dataset serialized-inputs)
 
     (= format "edn")
     (edn/read-string serialized-inputs)))

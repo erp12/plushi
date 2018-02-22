@@ -9,6 +9,8 @@
   [["-I" "--instruction-set" "Get serialized list of supported instructions."]
    ["-T" "--supported-types" "Get serialized list of supported types."]
    ["-R" "--run PROGRAM" "Run a push program."]
+   ["-D" "--dataset DATASET" "Pass serialized dataset of input values to program."
+    :default []]
    ["-f" "--format FORMAT" "Data format"
     :default "json"
     :validate [#(or (= % "json") (= % "edn")) "Invalid data format option"]]
@@ -16,8 +18,6 @@
     :default 0
     :parse-fn #(Integer/parseInt %)
     :validate [int?]]
-   ["-i" "--inputs INPUT-LIST" "Pass list of serialized input values to program."
-    :default []]
    ["-d" "--docs PATH" "Generates an html file documenting the instruction set."]
    ["-h" "--help"]])
 
@@ -36,7 +36,7 @@
 
     (:run cli-opts)
     (if (or (nil? (:format cli-opts))
-            (nil? (:inputs cli-opts)))
+            (nil? (:dataset cli-opts)))
       (throw (Exception. "When running programs --format, and --inputs must be specified.")))))
 
 
@@ -78,13 +78,12 @@
 
       ;; If the user is running  push program.
       (not (nil? (:run cli-opts)))
-      (let [inputs (e/parse-inputs (:inputs cli-opts)
-                                   (:format cli-opts))
+      (let [dataset (e/parse-input-dataset (:dataset cli-opts)
+                                           (:format cli-opts))
             program (e/parse-program (:run cli-opts)
                                      (:format cli-opts))
-            outputs (i/run-push (:code program)
-                                inputs
-                                (:output-types program))]
+            f #(i/run-push (:code program) % (:output-types program))
+            outputs (vec (map f (:data dataset)))]
         (println (e/encode-outputs outputs (:format cli-opts))))
 
       ;; If the user is generating instruction set documentation
