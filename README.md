@@ -77,10 +77,10 @@ Must be followed by a serialized dataset of inputs to the push program. Serializ
 Denotes the file format to use for communication. Supported formats are given in
 the below table
 
-| format | link                              |
-| ------ | --------------------------------- |
-| json   | https://www.json.org/             |
-| edn    | https://github.com/edn-format/edn |
+| Format | Link                              | Status         |
+| ------ | --------------------------------- | -------------- |
+| json   | https://www.json.org/             | Supported      |
+| edn    | https://github.com/edn-format/edn | In Development |
 
 ### --arity, -a
 

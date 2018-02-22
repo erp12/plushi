@@ -7,6 +7,6 @@ Things to do before initial release
 - [ ] Write documentation topic on instructions
 - [ ] Write documentation topic on python example
 - [ ] More instructions
-- [ ] Change input to a dataset
+- [x] Change input to a dataset
 - [ ] Add CLI instruction set filtering args
 - [ ] Add simplification

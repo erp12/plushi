@@ -1,5 +1,5 @@
 {
-  "code": [1, 2, "pushi:integer_add", "pushi:input_0", "pushi:integer_mult"],
-  "arity": 1,
+  "code": ["pushi:input_1", "pushi:integer_sub", 2, "pushi:integer_add", "pushi:input_0", "pushi:integer_mult"],
+  "arity": 2,
   "output-types": ["integer"]
 }

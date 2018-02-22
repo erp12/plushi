@@ -78,13 +78,12 @@
 
       ;; If the user is running  push program.
       (not (nil? (:run cli-opts)))
-      (let [inputs (e/parse-inputs (:inputs cli-opts)
-                                   (:format cli-opts))
+      (let [dataset (e/parse-input-dataset (:inputs cli-opts)
+                                           (:format cli-opts))
             program (e/parse-program (:run cli-opts)
                                      (:format cli-opts))
-            outputs (i/run-push (:code program)
-                                inputs
-                                (:output-types program))]
+            f #(i/run-push (:code program) % (:output-types program))
+            outputs (vec (map f dataset))]
         (println (e/encode-outputs outputs (:format cli-opts))))
 
       ;; If the user is generating instruction set documentation
