@@ -8,10 +8,10 @@
                  [org.clojure/tools.cli "0.3.5"]
                  [hiccup "1.0.5"]]
   :plugins [[lein-codox "0.10.3"]]
-  :main ^:skip-aot pushi.core
+  :main ^:skip-aot plushi.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}}
-  :codox {:namespaces [pushi.atoms pushi.core pushi.encode pushi.instruction
-                       pushi.interpreter pushi.state pushi.utils
-                       pushi.instruction.io]
+  :codox {:namespaces [plushi.atoms plushi.core plushi.encode plushi.instruction
+                       plushi.interpreter plushi.state plushi.utils
+                       plushi.instruction.io]
           :metadata {:doc "FIXME: write docs"}})
