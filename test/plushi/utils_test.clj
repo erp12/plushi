@@ -1,6 +1,6 @@
-(ns pushi.utils-test
+(ns plushi.utils-test
   (:require [clojure.test :refer :all]
-            [pushi.utils :refer :all]))
+            [plushi.utils :refer :all]))
 
 
 (deftest vector-to-list-stndrd

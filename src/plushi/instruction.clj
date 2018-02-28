@@ -1,14 +1,14 @@
-(ns pushi.instruction
+(ns plushi.instruction
   "This namespace contains function which manage the set of supported
   instructinos, and the related information such as supported data types."
   (:require [clojure.spec.alpha :as spec]
-            [pushi.utils :as u]))
+            [plushi.utils :as u]))
 
 
 (def instruction-set
   "An clojure atom containing a map of all registered instructions. Keys are
   keywords made from instruction names. Values are maps that conforms to the
-  :pushi.instruction/instruction spec."
+  :plushi.instruction/instruction spec."
   (atom {}))
 
 
@@ -19,25 +19,27 @@
 (spec/def ::docstring string?)
 (spec/def ::instruction
   (spec/keys :req-un [::name ::function ::input-types ::output-types]
-             :opt-un [::docstring]))
+             :opt-un [::open-parens ::docstring]))
 
 
 (defn make-instruction
-  "Creates an instruction map that :pushi.instruction/instruction spec.
+  "Creates an instruction map that :plushi.instruction/instruction spec.
   - Name should be a unique string with respect to the other instructions in the instruction set.
   - Function can be any clojure function.
   - input-types is either the keyword :STATE or a vector of stack types.
   - output-types is either the keyword :STATE or a vector of stack types.
-  - docstring (optional) is a string explaining what the instruction does.
-
-  TODO: Write custom instruction documentation page."
+  - code-blocks is the number of code blocks that follow the instruction.
+  - docstring (optional) is a string explaining what the instruction does."
   ([name function input-types output-types]
-    (make-instruction name function input-types output-types "No docstring."))
-  ([name function input-types output-types docstring]
+    (make-instruction name function input-types output-types 0))
+  ([name function input-types output-types code-blocks]
+    (make-instruction name function input-types output-types code-blocks "No docstring."))
+  ([name function input-types output-types code-blocks docstring]
     {:name name
      :function function
      :input-types input-types
      :output-types output-types
+     :code-blocks code-blocks
      :docstring docstring}))
 
 
@@ -48,8 +50,10 @@
     (swap! instruction-set assoc (keyword (:name instruction)) instruction))
   ([name function input-types output-types]
     (register (make-instruction name function input-types output-types)))
-  ([name function input-types output-types docstring]
-    (register (make-instruction name function input-types output-types docstring))))
+  ([name function input-types output-types code-blocks]
+    (register (make-instruction name function input-types output-types code-blocks)))
+  ([name function input-types output-types code-blocks docstring]
+    (register (make-instruction name function input-types output-types code-blocks docstring))))
 
 
 (defn get-supported-instructions
@@ -91,4 +95,4 @@
 
 
 (use
-  '(pushi.instruction numeric common io))
+  '(plushi.instruction io code numeric common))

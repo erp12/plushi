@@ -1,6 +1,6 @@
-(defproject pushi "0.1.0-SNAPSHOT"
-  :description "A language agnostic Push language interpreter."
-  :url "https://github.com/erp12/pushi"
+(defproject plushi "0.1.0-SNAPSHOT"
+  :description "A language agnostic Plush language interpreter."
+  :url "https://github.com/erp12/plushi"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.9.0"]

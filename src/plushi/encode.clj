@@ -1,4 +1,4 @@
-(ns pushi.encode
+(ns plushi.encode
   "This namespace contains functions that parse serialized push programs,
   and serialized input vectors. This namespace also provides functions to
   encode program outputs and supported instructions."
@@ -7,15 +7,15 @@
             [clojure.string :as str]
             [hiccup.core :as h]
             [hiccup.page :as hp]
-            [pushi.instruction :as instr]
-            [pushi.instruction.io :as instr-io]
-            [pushi.utils :as u]
-            [pushi.dataset.json :as json-dataset]))
+            [plushi.instruction :as instr]
+            [plushi.instruction.io :as instr-io]
+            [plushi.utils :as u]
+            [plushi.dataset.json :as json-dataset]))
 
 
 (defn- parse-code-vector
   "Parses a vector which represents a push program. Keywords or strings that
-  start with 'pushi:' are considered instruction names. "
+  start with 'plushi:' are considered instruction names. "
   [code-vec]
   (loop [remaining-code-vec code-vec
          code []]
@@ -30,11 +30,11 @@
 
           ; If atom is an instruction name in a string.
           (and (string? serialized-atom)
-               (str/starts-with? serialized-atom "pushi:"))
+               (str/starts-with? serialized-atom "plushi:"))
           (recur (rest remaining-code-vec)
                  (conj code
                        (instr/get-instruction (keyword (second (str/split serialized-atom
-                                                                          #"pushi:"))))))
+                                                                          #"plushi:"))))))
 
           ; If atom is an instruction name in a keyword
           (keyword? serialized-atom)
@@ -98,7 +98,7 @@
   (instr-io/register-input-instructions arity)
   (let [instruction-set (cond
                           (= format "json")
-                          (vec (map #(-> (assoc % :name (str "pushi:" (:name %)))
+                          (vec (map #(-> (assoc % :name (str "plushi:" (:name %)))
                                          (dissoc :function))
                                     (instr/get-supported-instructions)))
 
@@ -143,10 +143,10 @@
                       [:h1
                        [:a {:href "index.html"}
                         [:span.project-title
-                         [:span.project-name "Pushi Documentation"]]]]]
+                         [:span.project-name "plushi Documentation"]]]]]
                      [:div#content.namespace-docs {:style "left:0px;"}
                       (list [:h2#top.anchor "Instruction Set"]
-                            [:pre.doc "Documentation on the supported instructions of the pushi interpreter."]
+                            [:pre.doc "Documentation on the supported instructions of the plushi interpreter."]
                             (for [i (sort #(compare (:name %1) (:name %2))
                                           (vals @instr/instruction-set))]
                               [:div#var-image.public.anchor

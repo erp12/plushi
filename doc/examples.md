@@ -1,4 +1,4 @@
-# Examples of Pushi Usage
+# Examples of Plushi Usage
 
 ## From Bash
 
@@ -8,7 +8,7 @@ Say the `program.json` file has the following contents:
 
 ```JSON
 {
-  "code": ["pushi:input_1", "pushi:integer_sub", 2, "pushi:integer_add", "pushi:input_0", "pushi:integer_mult"],
+  "code": ["plushi:input_1", "plushi:integer_sub", 2, "plushi:integer_add", "plushi:input_0", "plushi:integer_mult"],
   "arity": 2,
   "output-types": ["integer"]
 }
@@ -39,12 +39,12 @@ prog=`cat simple_program.json | tr -d '[:space:]'`
 data=`cat data.json | tr -d '[:space:]'`
 ```
 
-### 2. Run Pushi
+### 2. Run plushi
 
-We specify the run (`-R`), dataset (`-D`), and format (`-f`) flags in our call to Pushi.
+We specify the run (`-R`), dataset (`-D`), and format (`-f`) flags in our call to plushi.
 
 ```sh
-java -jar pushi.jar -R $prog -D $data -f json
+java -jar plushi.jar -R $prog -D $data -f json
 ```
 
 A JSON blob should be printed to stdout containing an array of outputs for each data case. In this case each array will have a length of one because the program only outputs one value.
@@ -61,7 +61,7 @@ The output should look like the following:
 prog=`cat simple_program.json | tr -d '[:space:]'`
 data=`cat data.json | tr -d '[:space:]'`
 
-java -jar pushi.jar -R $prog -D $data -f json
+java -jar plushi.jar -R $prog -D $data -f json
 ```
 
 

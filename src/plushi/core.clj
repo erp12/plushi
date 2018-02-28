@@ -1,8 +1,8 @@
-(ns pushi.core
+(ns plushi.core
   (:gen-class)
   (:require [clojure.tools.cli :refer [parse-opts]]
-            [pushi.encode :as e]
-            [pushi.interpreter :as i]))
+            [plushi.encode :as e]
+            [plushi.interpreter :as i]))
 
 
 (def cli-options

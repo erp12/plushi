@@ -1,6 +1,6 @@
-(ns pushi.instruction.common
-  (:require [pushi.instruction :as i]
-            [pushi.state :as state]))
+(ns plushi.instruction.common
+  (:require [plushi.instruction :as i]
+            [plushi.state :as state]))
 
 
 (defn register-common

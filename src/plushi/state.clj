@@ -1,8 +1,8 @@
-(ns pushi.state
+(ns plushi.state
   "Functions to manipulate push states. Push states are composed of one stack
   per supported data type, a string representing stdout, and a vector where
   input values can be staged."
-  (:require [pushi.instruction :as i]))
+  (:require [plushi.instruction :as i]))
 
 
 (defn new-state

@@ -1,6 +1,6 @@
-(ns pushi.constraints-test
+(ns plushi.constraints-test
   (:require [clojure.test :refer :all]
-            [pushi.constraints :refer :all]))
+            [plushi.constraints :refer :all]))
 
 
 (deftest constrain-integer-stndrd

@@ -1,6 +1,6 @@
-(ns pushi.core-test
+(ns plushi.core-test
   (:require [clojure.test :refer :all]
-            [pushi.core :refer :all]))
+            [plushi.core :refer :all]))
 
 ; (deftest a-test
 ;   (testing "FIXME, I fail."

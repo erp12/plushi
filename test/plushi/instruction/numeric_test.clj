@@ -1,8 +1,8 @@
-(ns pushi.instruction.numeric-test
+(ns plushi.instruction.numeric-test
   (:require [clojure.test :refer :all]
-            [pushi.instruction :refer [instruction-set]]
-            ;[pushi.interpreter :refer [evaluate-atom]]
-            [pushi.state :as s]))
+            [plushi.instruction :refer [instruction-set]]
+            ;[plushi.interpreter :refer [evaluate-atom]]
+            [plushi.state :as s]))
 
 ; (deftest a-test
 ;   (testing "FIXME, I fail."
@@ -12,7 +12,7 @@
   (s/new-state [:integer :float]))
 
 
-(def eval-atom #'pushi.interpreter/evaluate-atom)
+(def eval-atom #'plushi.interpreter/evaluate-atom)
 
 
 (deftest insufficient_args

@@ -1,6 +1,6 @@
-(ns pushi.atoms-test
+(ns plushi.atoms-test
   (:require [clojure.test :refer :all]
-            [pushi.atoms :refer :all]))
+            [plushi.atoms :refer :all]))
 
 
 (deftest recognize-type-instruction

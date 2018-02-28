@@ -1,13 +1,13 @@
-(ns pushi.atoms
+(ns plushi.atoms
   "This namespace contains functions related to recognizing and enforcing push
   types and push atoms.
 
   NOTE: In this context, 'atom' refers to an element of a push program, not a
   clojure atom."
   (:require [clojure.spec.alpha :as spec]
-            [pushi.instruction :as i]
-            [pushi.utils :as u]
-            [pushi.constraints :as c]))
+            [plushi.instruction :as i]
+            [plushi.utils :as u]
+            [plushi.constraints :as c]))
 
 
 (spec/def ::push-type keyword?)
@@ -33,7 +33,7 @@
   clojure atom."
   [atom]
   (cond
-    (spec/valid? :pushi.instruction/instruction atom) :instruction
+    (spec/valid? :plushi.instruction/instruction atom) :instruction
     (spec/valid? ::push-vector atom) (keyword (str (u/keyword-to-str (:push-type atom)) "_vector"))
     (list? atom) :list
     (int? atom) :integer

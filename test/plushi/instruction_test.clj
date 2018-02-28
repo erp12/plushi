@@ -1,6 +1,6 @@
-(ns pushi.instruction-test
+(ns plushi.instruction-test
   (:require [clojure.test :refer :all]
-            [pushi.instruction :refer :all]))
+            [plushi.instruction :refer :all]))
 
 
 (deftest register-noop-instruction
@@ -33,7 +33,7 @@
 (deftest get-supported-push-types
   (testing "Get vector of all push type names"
     (is (= (set (get-supported-types))
-           #{:integer :boolean :float}))))
+           #{:exec :integer :boolean :float}))))
 
 
 (deftest get-specified-instruction-stndrd

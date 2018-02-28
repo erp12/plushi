@@ -1,5 +1,5 @@
-(ns pushi.instruction.numeric
-  (:require [pushi.instruction :as i]))
+(ns plushi.instruction.numeric
+  (:require [plushi.instruction :as i]))
 
 
 (defn- p-div

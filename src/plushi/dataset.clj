@@ -1,5 +1,5 @@
-(ns pushi.dataset
-  "In pushi, a dataset is the a data structure that contains a vector of `cases`
+(ns plushi.dataset
+  "In plushi, a dataset is the a data structure that contains a vector of `cases`
   and a vector of `labels`. Each `case` is a vector of values of any type to
   be used as inputs to a push program."
   (:use [clojure.data]))

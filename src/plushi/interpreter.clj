@@ -1,10 +1,10 @@
-(ns pushi.interpreter
+(ns plushi.interpreter
   "Contains function to asist in running a push program."
-  (:require [pushi.instruction :as instr]
-            [pushi.atoms :as a]
-            [pushi.state :as state]
-            [pushi.utils :as u]
-            [pushi.constraints :as c]))
+  (:require [plushi.instruction :as instr]
+            [plushi.atoms :as a]
+            [plushi.state :as state]
+            [plushi.utils :as u]
+            [plushi.constraints :as c]))
 
 
 (def stack-types

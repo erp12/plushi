@@ -2,7 +2,7 @@ version: 2
 jobs:
 
   deps:
-    working_directory: ~/pushi
+    working_directory: ~/plushi
     docker:
       - image: circleci/clojure:lein-2.7.1
     environment:
@@ -14,10 +14,10 @@ jobs:
       - save_cache:
           paths:
             - ~/.m2
-          key: pushi-{{ checksum "project.clj" }}
+          key: plushi-{{ checksum "project.clj" }}
 
   test:
-    working_directory: ~/pushi
+    working_directory: ~/plushi
     docker:
       - image: circleci/clojure:lein-2.7.1
     environment:
@@ -26,11 +26,11 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: pushi-{{ checksum "project.clj" }}
+          key: plushi-{{ checksum "project.clj" }}
       - run: lein test
 
   build:
-    working_directory: ~/pushi
+    working_directory: ~/plushi
     docker:
       - image: circleci/clojure:lein-2.7.1
     environment:
@@ -39,7 +39,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: pushi-{{ checksum "project.clj" }}
+          key: plushi-{{ checksum "project.clj" }}
       - run: lein uberjar
 
 workflows:

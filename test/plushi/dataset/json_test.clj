@@ -1,6 +1,6 @@
-(ns pushi.dataset.json-test
+(ns plushi.dataset.json-test
   (:require [clojure.test :refer :all]
-            [pushi.dataset.json :refer :all]))
+            [plushi.dataset.json :refer :all]))
 
 
 (deftest json-to-dataset-standard

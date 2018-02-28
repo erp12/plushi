@@ -1,4 +1,4 @@
-(ns pushi.constraints
+(ns plushi.constraints
   "This namespace controls the constraints applied to the push interpreters.
   These include, valid ranges for data types, program rumtime timeouts, and
   others.")

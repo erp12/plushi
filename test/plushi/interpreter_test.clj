@@ -1,7 +1,7 @@
-(ns pushi.interpreter-test
+(ns plushi.interpreter-test
   (:require [clojure.test :refer :all]
-            [pushi.state :as state]
-            [pushi.interpreter :refer :all]))
+            [plushi.state :as state]
+            [plushi.interpreter :refer :all]))
 
 ; (deftest a-test
 ;   (testing "FIXME, I fail."

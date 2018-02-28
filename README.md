@@ -1,6 +1,6 @@
-# pushi
+# plushi
 
-Pushi is a language agnostic push interpreter capable of running push programs
+Plushi is a language agnostic push interpreter capable of running push programs
 via JSON/EDN interface.
 
 Push is a programming language designed for AI systems to write software in.
@@ -12,7 +12,7 @@ To read more about the push language, see the [Push Redux](https://erp12.github.
 
 ## Installation
 
-Download from https://github.com/erp12/pushi/releases.
+Download from https://github.com/erp12/plushi/releases.
 
 For easy integration with Clojure projects, a public clojars release coming soon!
 
@@ -21,30 +21,30 @@ For easy integration with Clojure projects, a public clojars release coming soon
 
 ### Standalone
 
-Currently, pushi is a tool that is meant to be used as a standalone jar, however
+Currently, plushi is a tool that is meant to be used as a standalone jar, however
 it is expected that this will most commonly be done via system calls from inside
 other programs.
 
-$ java -jar pushi-0.1.0-standalone.jar [args]
+$ java -jar plushi-0.1.0-standalone.jar [args]
 
-Send complex data structures to pushi from another context, serialized data
+Send complex data structures to plushi from another context, serialized data
 sturctures such as JSON and EDN are used. For more information on how to used
-the pushi standalone with various arguments, see the Options section of the
+the plushi standalone with various arguments, see the Options section of the
 README and the introduction documentation topic.
 
 
 ### Clojure
 
-Pushi can also be used as a Clojure library for easy integration with Clojure
+Plushi can also be used as a Clojure library for easy integration with Clojure
 projects. For more information see with documentation on this topic.
 
 ### Python
 
 A python interface using Py4j might be in this project's future, but it is not
-currently being worked on. In the meantime, you can run pushi from Python
+currently being worked on. In the meantime, you can run plushi from Python
 using the standalone jar and system calls.
 
-If you would like to help integrate pushi and python (or any other language)
+If you would like to help integrate plushi and python (or any other language)
 consider contributing!
 
 

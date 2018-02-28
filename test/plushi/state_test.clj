@@ -1,6 +1,6 @@
-(ns pushi.state-test
+(ns plushi.state-test
   (:require [clojure.test :refer :all]
-            [pushi.state :refer :all]))
+            [plushi.state :refer :all]))
 
 
 (def ut-state

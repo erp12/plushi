@@ -1,5 +1,5 @@
-(ns pushi.utils
-  "Utility functions for use within pushi.")
+(ns plushi.utils
+  "Utility functions for use within plushi.")
 
 
 (defn vector-to-list

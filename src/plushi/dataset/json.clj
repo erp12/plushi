@@ -1,6 +1,6 @@
-(ns pushi.dataset.json
+(ns plushi.dataset.json
   (:require [clojure.data.json :as json]
-            [pushi.dataset :as ds]))
+            [plushi.dataset :as ds]))
 
 
 (defn json-to-dataset
