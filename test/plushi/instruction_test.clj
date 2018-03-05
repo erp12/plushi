@@ -4,9 +4,9 @@
 
 
 (deftest register-noop-instruction
-  (testing "Register a noop instruction"
+  (testing "Register a test noop instruction"
     (do
-      (register "noop-TEST" (fn [s] s) :STATE :STATE)
+      (register "noop-TEST" (fn [s] s) :STATE :STATE 0)
       (is (contains? @instruction-set :noop-TEST))
       (is (= ((:function (:noop-TEST @instruction-set)) {:a 1})
              {:a 1})))))

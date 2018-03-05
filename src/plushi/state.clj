@@ -34,18 +34,18 @@
   (assoc state (keyword stack-type) (rest (stack-type state))))
 
 
-(defn top-item
-  "Returns the top item of the type stack in state. Returns :NO-STACK-ITEM if
-  called on an empty stack."
-  [state stack-type]
-  (nth ((keyword stack-type) state) 0 :NO-STACK-ITEM))
-
-
 (defn nth-item
   "Returns the item at a certain position (aka depth) of the type stack in
   state. Returns :no-stack-item if called on an empty stack, or out of bounds."
   [state stack-type position]
   (nth ((keyword stack-type) state) position :NO-STACK-ITEM))
+
+
+(defn top-item
+  "Returns the top item of the type stack in state. Returns :NO-STACK-ITEM if
+  called on an empty stack."
+  [state stack-type]
+  (nth-item state stack-type 0))
 
 
 (defn insert-item

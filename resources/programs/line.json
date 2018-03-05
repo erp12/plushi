@@ -1,0 +1,5 @@
+{
+  "code": ["plushi:input_0", 1.2, "plushi:float_mult", -0.5, "plushi:float_add"],
+  "arity": 1,
+  "output-types": ["float"]
+}

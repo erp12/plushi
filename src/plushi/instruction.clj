@@ -16,10 +16,11 @@
 (spec/def ::function fn?)
 (spec/def ::input-types (spec/or :type-list sequential? :state keyword?))
 (spec/def ::output-types (spec/or :type-list sequential? :state keyword?))
+(spec/def ::code-blocks int?)
 (spec/def ::docstring string?)
 (spec/def ::instruction
   (spec/keys :req-un [::name ::function ::input-types ::output-types]
-             :opt-un [::open-parens ::docstring]))
+             :opt-un [::code-blocks ::docstring]))
 
 
 (defn make-instruction
@@ -30,8 +31,6 @@
   - output-types is either the keyword :STATE or a vector of stack types.
   - code-blocks is the number of code blocks that follow the instruction.
   - docstring (optional) is a string explaining what the instruction does."
-  ([name function input-types output-types]
-    (make-instruction name function input-types output-types 0))
   ([name function input-types output-types code-blocks]
     (make-instruction name function input-types output-types code-blocks "No docstring."))
   ([name function input-types output-types code-blocks docstring]
@@ -48,8 +47,6 @@
   add a key-value pair to the instruction-set atom."
   ([instruction]
     (swap! instruction-set assoc (keyword (:name instruction)) instruction))
-  ([name function input-types output-types]
-    (register (make-instruction name function input-types output-types)))
   ([name function input-types output-types code-blocks]
     (register (make-instruction name function input-types output-types code-blocks)))
   ([name function input-types output-types code-blocks docstring]
@@ -90,8 +87,13 @@
 (defn get-instruction
   "Given an instruction name (either string or keyword) return the instruction
   map of the corresponding push instruction."
-  [name]
-  (get @instruction-set (keyword name)))
+  ([name]
+   (get-instruction name false))
+  ([name include-docstring]
+   (let [i (get @instruction-set (keyword name))]
+     (if include-docstring
+       i
+       (dissoc i :docstring)))))
 
 
 (use

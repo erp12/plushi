@@ -49,3 +49,9 @@
   (testing "Standard call to keyword-to-str"
     (is (= (keyword-to-str :foo)
            "foo"))))
+
+
+(deftest round-float-stndrd
+  (testing "Standard call to round-float"
+    (is (= (round-float -0.02000001 3)
+           -0.02))))

@@ -15,7 +15,7 @@
     (map #(i/register (str "input_" %)
                       (fn [state]
                         (s/push-item state :exec (nth (:inputs state) %)))
-                :STATE :STATE)
+                :STATE :STATE 0)
          (range num-inputs))))
 
 

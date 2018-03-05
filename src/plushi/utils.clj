@@ -45,3 +45,10 @@
   [keyword]
   (let [s (str keyword)]
     (subs s 1 (count s))))
+
+
+(defn round-float
+  "Rounds the float value to given number of decimal places"
+  [value decimal-places]
+  (let [scale (Math/pow 10 decimal-places)]
+    (/ (Math/round (* value scale)) scale)))

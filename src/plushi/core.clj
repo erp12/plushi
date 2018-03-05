@@ -2,6 +2,9 @@
   (:gen-class)
   (:require [clojure.tools.cli :refer [parse-opts]]
             [plushi.encode :as e]
+            [plushi.translate :as t]
+            [plushi.instruction :as instr]
+            [plushi.instruction.io :as instr-io]
             [plushi.interpreter :as i]))
 
 
@@ -19,6 +22,7 @@
     :parse-fn #(Integer/parseInt %)
     :validate [int?]]
    ["-d" "--docs PATH" "Generates an html file documenting the instruction set."]
+   ["-v" "--verbose"]
    ["-h" "--help"]])
 
 
@@ -50,12 +54,20 @@
 ;         (println))))
 
 
+(defn run-on-dataset
+  [plush-program dataset is-verbose]
+  (let [push-program (t/plush-to-push (:code plush-program))
+        f #(i/run-push push-program % (:output-types plush-program) is-verbose)]
+    (vec (map f (:data dataset)))))
+
+
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
   (let [cli-map (parse-opts args cli-options)
         ;; _ (println cli-map)
-        cli-opts (:options cli-map)]
+        cli-opts (:options cli-map)
+        is-verbose (not (nil? (:verbose cli-opts)))]
     (validate-cli-opts cli-opts)
 
     (cond
@@ -69,8 +81,10 @@
 
       ;; If the user is trying to get the set of supported instructions.
       (not (nil? (:instruction-set cli-opts)))
-      (println (e/encode-instruction-set (:arity cli-opts)
-                                         (:format cli-opts)))
+      (do
+        (instr-io/register-input-instructions (:arity cli-opts))
+        (println (e/encode-instruction-set (instr/get-supported-instructions)
+                                           (:format cli-opts))))
 
       ;; If the user is trying to get the set of supported types.
       (not (nil? (:supported-types cli-opts)))
@@ -80,10 +94,9 @@
       (not (nil? (:run cli-opts)))
       (let [dataset (e/parse-input-dataset (:dataset cli-opts)
                                            (:format cli-opts))
-            program (e/parse-program (:run cli-opts)
+            plush-program (e/parse-program (:run cli-opts)
                                      (:format cli-opts))
-            f #(i/run-push (:code program) % (:output-types program))
-            outputs (vec (map f (:data dataset)))]
+            outputs (run-on-dataset plush-program dataset is-verbose)]
         (println (e/encode-outputs outputs (:format cli-opts))))
 
       ;; If the user is generating instruction set documentation

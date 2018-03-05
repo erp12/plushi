@@ -94,17 +94,16 @@
 
 
 (defn encode-instruction-set
-  [arity format]
-  (instr-io/register-input-instructions arity)
-  (let [instruction-set (cond
+  [instruction-set format]
+  (let [encoded-instruction-set (cond
                           (= format "json")
                           (vec (map #(-> (assoc % :name (str "plushi:" (:name %)))
                                          (dissoc :function))
-                                    (instr/get-supported-instructions)))
+                                    instruction-set))
 
                           (= format "edn")
                           (vec (map #(dissoc % :function)
-                                    (instr/get-supported-instructions))))]
+                                    instruction-set)))]
       (cond
         (= format "json")
         (json/write-str instruction-set)
