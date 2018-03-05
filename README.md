@@ -1,5 +1,8 @@
 # plushi
 
+[![CircleCI](https://circleci.com/gh/erp12/plushi.svg?style=svg)](https://circleci.com/gh/erp12/plushi)
+
+
 Plushi is a language agnostic push interpreter capable of running push programs
 via JSON/EDN interface.
 

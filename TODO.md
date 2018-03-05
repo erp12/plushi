@@ -1,16 +1,21 @@
-Things to do before initial release
-===================================
+# Things to do before initial release
 
-- [x] Plush?
+## High Priority
+
 - [x] Instruction set unit tests
 - [ ] Denote types of instructions which return state
+- [ ] More instructions
+
+## Low Priority
 
 - [ ] Push program execution timeout
 - [ ] Write documentation topic on instructions
 - [ ] Write documentation topic on python example
-- [ ] More instructions
 - [ ] Add CLI instruction set filtering args
-- [ ] Add simplification
 - [ ] Execution limit
-- [ ] Other params that can be specified by program.
 - [ ] Denote if it has randomness.
+
+# Future Features
+
+- [ ] Other interpreter params that can be specified by program.
+- [ ] Add simplification

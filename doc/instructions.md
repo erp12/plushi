@@ -5,7 +5,7 @@
 Write me!
 
 A webpage detailing all supported instructions can be found
-[here](pushi_instruction_set.html).
+[here](plushi_instruction_set.html).
 
 ## Defining New Instructions
 
