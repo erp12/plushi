@@ -15,6 +15,12 @@
             "A noop instruction which does nothing.")
 
 
+(i/register "noop_open"
+            (fn [] nil)
+            [] [] 1
+            "A noop instruction which does nothing. Opens a code block.")
+
+
 (i/register "exec_if"
             (fn [b then else]
               (if b then else))

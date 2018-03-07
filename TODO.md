@@ -9,14 +9,12 @@
 ## Low Priority
 
 - [ ] Push program execution timeout
+- [ ] Execution limit
 - [ ] Write documentation topic on instructions
 - [ ] Write documentation topic on python example
 - [ ] Add CLI instruction set filtering args
-- [ ] Execution limit
 - [ ] Denote if it has randomness.
-- [ ] Noop open
 
 # Future Features
 
-- [ ] Other interpreter params that can be specified by program.
-- [ ] Add simplification
+- [ ] Allow for lang-constraints to be set via CLI

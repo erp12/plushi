@@ -14,6 +14,10 @@
     (i/register (str type-str "_dup")
                 (fn [x] [x x])
                 [type-kw] [type-kw type-kw] 0)
+
+    (i/register (str type-str "_dup_times")
+                (fn [x n] [(repeat n x)])
+                [type-kw :integer] [:exec] 0)
     ))
 
 (doall (map register-common [:integer :float :string :boolean :code]))
