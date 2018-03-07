@@ -14,6 +14,7 @@
 - [ ] Add CLI instruction set filtering args
 - [ ] Execution limit
 - [ ] Denote if it has randomness.
+- [ ] Noop open
 
 # Future Features
 

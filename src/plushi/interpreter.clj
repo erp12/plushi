@@ -80,7 +80,9 @@
         s
         (recur (rest remaining-items)
                (rest remaining-types)
-               (state/push-item s (first remaining-types) (first remaining-items)))))))
+               (if (= (first remaining-types) :stdout)
+                 (assoc s :stdout (str (:stdout s) (first remaining-items)))
+                 (state/push-item s (first remaining-types) (first remaining-items))))))))
 
 
 (defn- evaluate-atom

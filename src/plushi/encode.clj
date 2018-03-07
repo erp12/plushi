@@ -95,21 +95,15 @@
 
 (defn encode-instruction-set
   [instruction-set format]
-  (let [encoded-instruction-set (cond
-                          (= format "json")
-                          (vec (map #(-> (assoc % :name (str "plushi:" (:name %)))
-                                         (dissoc :function))
-                                    instruction-set))
+    (cond
+      (= format "json")
+      (json/write-str (vec (map #(-> (assoc % :name (str "plushi:" (:name %)))
+                                     (dissoc :function))
+                                instruction-set)))
 
-                          (= format "edn")
-                          (vec (map #(dissoc % :function)
-                                    instruction-set)))]
-      (cond
-        (= format "json")
-        (json/write-str instruction-set)
-
-        (= format "edn")
-        (pr-str instruction-set))))
+      (= format "edn")
+      (pr-str (vec (map #(dissoc % :function)
+                        instruction-set)))))
 
 
 (defn encode-supported-types

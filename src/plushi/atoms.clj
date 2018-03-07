@@ -33,6 +33,7 @@
   clojure atom."
   [atom]
   (cond
+    (nil? atom) (throw (Exception. "nil is not valid plush atom type."))
     (spec/valid? :plushi.instruction/instruction atom) :instruction
     (spec/valid? ::push-vector atom) (keyword (str (u/keyword-to-str (:push-type atom)) "_vector"))
     (list? atom) :list
@@ -40,7 +41,7 @@
     (float? atom) :float
     (boolean? atom) :boolean
     (string? atom) :string
-    :else (throw (Exception. "Unknown Push atom type"))))
+    :else (throw (Exception. (str "Unknown Push atom type: " (str (type atom)))))))
 
 
 (defn coerce-atom-type

@@ -1,25 +1,14 @@
 (ns plushi.instruction.numeric-test
   (:require [clojure.test :refer :all]
             [plushi.instruction :refer [instruction-set]]
-            ;[plushi.interpreter :refer [evaluate-atom]]
             [plushi.state :as s]))
 
-; (deftest a-test
-;   (testing "FIXME, I fail."
-;     (is (= 0 1))))
 
 (def ut-state
   (s/new-state [:integer :float]))
 
 
 (def eval-atom #'plushi.interpreter/evaluate-atom)
-
-
-(deftest insufficient_args
-  (testing "Insufficient args"
-    (is (= (eval-atom ut-state
-                      (:integer_add @instruction-set))
-           {:integer '() :float '() :stdout "" :inputs []}))))
 
 
 (deftest integer_add_stndrd
