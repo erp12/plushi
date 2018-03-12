@@ -14,9 +14,18 @@
   (doall
     (map #(i/register (str "input_" %)
                       (fn [state]
-                        (s/push-item state :exec (nth (:inputs state) %)))
-                :STATE :STATE 0)
+                        (nth (:inputs state) %))
+                :STATE [:exec] 0)
          (range num-inputs))))
 
 
-;; TODO: Print instructions
+(defn register-print-instruction
+  ""
+  [type-kw]
+  (let [type-str (name type-kw)]
+    (i/register (str type-str "_print")
+                #(str %)
+                [type-kw] [:stdout] 0)))
+
+
+(doall (map register-print-instruction [:integer :float :string :char :boolean]))

@@ -40,6 +40,23 @@
     :else (vector x)))
 
 
+(defn coerce-to-char
+  "Attempts to coerce x to a character. If not possible, throws error."
+  [x]
+  (cond
+    (or (char? x)
+        (int? x))
+    (char x)
+
+
+    (and (string? x)
+         (= (count x) 1))
+    (first (char-array x))
+
+    :else
+    (throw (Exception. (str "Cannot coerce " (str x) " to char")))))
+
+
 (defn keyword-to-str
   "Converts a keyword to a string without the colon."
   [keyword]

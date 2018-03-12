@@ -97,4 +97,4 @@
 
 
 (use
-  '(plushi.instruction io code numeric common))
+  '(plushi.instruction io code numeric text common))

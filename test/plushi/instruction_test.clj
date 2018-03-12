@@ -20,8 +20,8 @@
 
 (deftest get-supported-instructions-type
   (testing "Get vector of all integer instructions"
-    (is (= (count (get-supported-instructions [:integer]))
-           17))))
+    (is (>= (count (get-supported-instructions [:integer]))
+            15))))
 
 
 (deftest get-supported-instructions-name-pattern
@@ -33,7 +33,7 @@
 (deftest get-supported-push-types
   (testing "Get vector of all push type names"
     (is (= (set (get-supported-types))
-           #{:exec :integer :boolean :float}))))
+           #{:exec :float :string :integer :code :boolean :char :stdout}))))
 
 
 (deftest get-specified-instruction-stndrd

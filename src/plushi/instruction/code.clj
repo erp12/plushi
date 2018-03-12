@@ -4,15 +4,21 @@
 
 
 (i/register "close"
-            (fn [s] s)
-            :STATE :STATE 0
+            (fn [] nil)
+            [] [] 0
             "Denotes a close marker in the program used by control structures.")
 
 
 (i/register "noop"
-            (fn [s] s)
-            :STATE :STATE 0
+            (fn [] nil)
+            [] [] 0
             "A noop instruction which does nothing.")
+
+
+(i/register "noop_open"
+            (fn [] nil)
+            [] [] 1
+            "A noop instruction which does nothing. Opens a code block.")
 
 
 (i/register "exec_if"

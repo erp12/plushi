@@ -8,12 +8,16 @@
   (let [type-str (name type-kw)]
 
     (i/register (str type-str "_pop")
-                #(state/pop-item % type-kw)
-                :STATE :STATE 0)
+                (fn [x] nil)
+                [type-kw] [] 0)
 
     (i/register (str type-str "_dup")
-                #(state/top-item % type-kw)
-                :STATE [type-kw] 0)
+                (fn [x] [x x])
+                [type-kw] [type-kw type-kw] 0)
+
+    (i/register (str type-str "_dup_times")
+                (fn [x n] [(repeat n x)])
+                [type-kw :integer] [:exec] 0)
     ))
 
-(doall (map register-common [:integer :float]))
+(doall (map register-common [:integer :float :string :boolean :code]))

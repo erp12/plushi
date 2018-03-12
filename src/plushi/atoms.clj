@@ -11,6 +11,7 @@
 
 
 (spec/def ::push-type keyword?)
+(spec/def ::vector-data vector?)
 (spec/def ::push-vector
   (spec/keys :req-un [::push-type ::vector-data]))
 
@@ -19,10 +20,11 @@
   "A map where keys are push types and values are maps that contain a
   corresponding predicate (:pred key) and coerce-ing function (:coerce key)."
   {:list {:pred list? :coerce u/ensure-list}
-   :integer {:pred int? :coerce #(int (c/constrain-integer %))}
-   :float {:pred float? :coerce #(float (c/constrain-float %))}
+   :char {:pred char? :coerce u/coerce-to-char}
+   :integer {:pred int? :coerce #(c/constrain-integer (int %))}
+   :float {:pred float? :coerce #(c/constrain-float (float %))}
    :boolean {:pred boolean? :coerce boolean}
-   :string {:pred string? :coerce #(str (c/constrain-string %))}})
+   :string {:pred string? :coerce #(c/constrain-string (str %))}})
 
 
 (defn recognize-atom-type
@@ -33,14 +35,17 @@
   clojure atom."
   [atom]
   (cond
+    (nil? atom) (throw (Exception. "nil is not valid plush atom type."))
     (spec/valid? :plushi.instruction/instruction atom) :instruction
     (spec/valid? ::push-vector atom) (keyword (str (u/keyword-to-str (:push-type atom)) "_vector"))
     (list? atom) :list
+    (char? atom) :char
     (int? atom) :integer
     (float? atom) :float
     (boolean? atom) :boolean
     (string? atom) :string
-    :else (throw (Exception. "Unknown Push atom type"))))
+    :else (throw (Exception. (str "Unknown Push atom type: " (str (type atom))
+                                  ". From atom: " atom)))))
 
 
 (defn coerce-atom-type
