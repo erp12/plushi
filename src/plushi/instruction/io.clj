@@ -28,4 +28,4 @@
                 [type-kw] [:stdout] 0)))
 
 
-(doall (map register-print-instruction [:integer :float :string :boolean]))
+(doall (map register-print-instruction [:integer :float :string :char :boolean]))

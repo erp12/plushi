@@ -116,3 +116,39 @@
                           (s/push-item :integer -3))
                       (:integer_dec @instruction-set))
            {:integer '(-4) :float '() :stdout "" :inputs []}))))
+
+
+(deftest float_lt_stndrd
+  (testing "float less than (standard)"
+    (is (= (eval-atom (-> ut-state
+                          (s/push-item :float 1.2)
+                          (s/push-item :float 2.3))
+                      (:float_lt @instruction-set))
+           {:integer '() :float '() :boolean '(false) :stdout "" :inputs []}))))
+
+
+(deftest integer_lte_stndrd
+  (testing "integer less than or equal (standard)"
+    (is (= (eval-atom (-> ut-state
+                          (s/push-item :integer 1)
+                          (s/push-item :integer -2))
+                      (:integer_lte @instruction-set))
+           {:integer '() :float '() :boolean '(true) :stdout "" :inputs []}))))
+
+
+(deftest float_gt_stndrd
+  (testing "float greater than (standard)"
+    (is (= (eval-atom (-> ut-state
+                          (s/push-item :float 1.2)
+                          (s/push-item :float 2.3))
+                      (:float_gt @instruction-set))
+           {:integer '() :float '() :boolean '(true) :stdout "" :inputs []}))))
+
+
+(deftest integer_gte_stndrd
+  (testing "integer greater than or equal (standard)"
+    (is (= (eval-atom (-> ut-state
+                          (s/push-item :integer 1)
+                          (s/push-item :integer -2))
+                      (:integer_gte @instruction-set))
+           {:integer '() :float '() :boolean '(false) :stdout "" :inputs []}))))

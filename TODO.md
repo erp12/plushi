@@ -4,7 +4,12 @@
 
 - [x] Instruction set unit tests
 - [ ] Denote types of instructions which return state
-- [ ] More instructions
+- [ ] Denote types of instructions which noop
+- [ ] Finish string instructions
+- [ ] Logical instructions
+- [ ] Finish common instructions
+- [ ] Finish code instructions
+- [ ] Random instructions
 
 ## Low Priority
 
@@ -13,7 +18,7 @@
 - [ ] Write documentation topic on instructions
 - [ ] Write documentation topic on python example
 - [ ] Add CLI instruction set filtering args
-- [ ] Denote if it has randomness.
+- [ ] Denote if instruction has randomness.
 
 # Future Features
 

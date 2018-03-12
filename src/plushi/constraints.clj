@@ -58,7 +58,7 @@
 (defn constrain-string
   "Returns s where the length is capped based on the push language constraints."
   [s]
-  (apply str (take (:max-string-length @lang-constraints) s)))
+  (subs s 0 (min (count s) (:max-string-length @lang-constraints))))
 
 
 (defn constrain-push-vector
