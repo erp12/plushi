@@ -148,9 +148,11 @@
     (loop [state (-> (state/new-state stack-types)
                      (load-program program)
                      (load-inputs inputs))
-           steps 0]
+           steps 0
+           stop-time (+' (System/nanoTime) (:runtime-limit @c/lang-constraints))]
       (if (or (empty? (:exec state))
-              (> steps (:atom-limit @c/lang-constraints)))
+              (> steps (:atom-limit @c/lang-constraints))
+              (> (System/nanoTime) stop-time))
         (do
           (if verbose
             (do
@@ -165,4 +167,5 @@
               (println "Current state:")
               (state/pretty-print state-no-atom)))
           (recur (evaluate-atom state-no-atom atom)
-                 (inc steps)))))))
+                 (inc steps)
+                 stop-time))))))
