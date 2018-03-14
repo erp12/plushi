@@ -2,6 +2,8 @@
 
 ## High Priority
 
+- [ ] Fix doc generation.
+- [ ] Fix validation test.
 - [ ] Denote types of instructions which return state
 - [ ] Denote types of instructions which noop
 
