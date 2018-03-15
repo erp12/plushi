@@ -10,11 +10,12 @@
 
 (defn ensure-list
   "Ensures the x is a list. Converts other collections to a list. Otherwise
-  creates a list with x in it."
+  creates a list with x in it. Realizes x if x is a lazy sequence."
   [x]
   (cond
     (list? x) x
     (vector? x) (vector-to-list x)
+    (instance? clojure.lang.LazySeq x) (apply list x)
     (coll? x) (into '() x)
     :else (list x)))
 

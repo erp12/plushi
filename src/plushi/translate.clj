@@ -1,111 +1,117 @@
 (ns plushi.translate
   (:require [clojure.spec.alpha :as spec]
+            [clojure.string :as s]
+            [hiccup.core :as h]
+            [hiccup.page :as hp]
             [plushi.atoms :as a]
-            [plushi.utils :as u]))
+            [plushi.utils :as u]
+            [plushi.instruction :as i]))
 
 
-(defn is-close-atom
+(defn- is-close-atom
   [atom]
   (and (spec/valid? :plushi.instruction/instruction atom)
        (= (:name atom) "close")))
 
 
-(defn get-matching-close-index
-  [sequence]
-  (loop [remaining sequence
-         open-count 0
-         ndx 0]
-    (cond
-      (empty? remaining)
-      :NO-CLOSE
-
-      (= (first remaining) :plush-open)
-      (recur (rest remaining)
-             (inc open-count)
-             (inc ndx))
-
-      (= (first remaining) :plush-close)
-      (if (zero? open-count)
-        ndx
-        (recur (rest remaining)
-               (dec open-count)
-               (inc ndx)))
-
-      :else
-      (recur (rest remaining)
-             open-count
-             (inc ndx)))))
+(defn- opener?
+  [atom]
+  (and (vector? atom)
+       (= (first atom) :plush-open)))
 
 
-(defn open-close-vec-to-push
-  [open-close-vec]
-  (cond
-    (not (vector? open-close-vec))
-    open-close-vec
 
-    (empty? open-close-vec)
-    (list)
+(defn load-instructions
+  [plush-code]
+  (loop [remaining-plush-encoding plush-code
+         plush []]
+    (if (empty? remaining-plush-encoding)
+      (u/vector-to-list plush)
+      (let [atom (first remaining-plush-encoding)]
+        (cond
+          ; If atom is an instruction name in a string. Used by JSON.
+          (and (string? atom)
+               (s/starts-with? atom "plushi:"))
+          (recur (rest remaining-plush-encoding)
+                 (conj plush
+                       (i/get-instruction (keyword (second (s/split atom
+                                                                    #"plushi:"))))))
 
-    :else
-    (loop [result []
-           remaining open-close-vec]
-      (if (empty? remaining)
-        (u/vector-to-list result)
-        (if (= (first remaining) :plush-open)
-          (let [remaining (vec (rest remaining))
-                ndx-of-close (get-matching-close-index remaining)
-                sub-plush-expression (vec (take ndx-of-close remaining))
-                expression-as-push (open-close-vec-to-push sub-plush-expression)]
-            (recur (conj result expression-as-push)
-                   (vec (drop (inc ndx-of-close) remaining))))
-          (recur (conj result (first remaining))
-                 (vec (rest remaining))))))))
+          ; If atom is an instruction name in a keyword. Used by EDN.
+          (keyword? atom)
+          (recur (rest remaining-plush-encoding)
+                 (conj plush (i/get-instruction atom)))
+
+          ; If atom is anything else, leave it as is.
+          :else
+          (recur (rest remaining-plush-encoding)
+                 (conj plush atom)))))))
 
 
 (defn plush-to-push
-  [plush-program]
-  (loop [plush-open-close-vector []
-         remaining-plush-code plush-program
-         code-block-depth 0
-         needed-close-paren-stack (list)]
-    (cond
-      ; Check if at end of program but still need to add parens.
-      (and (empty? remaining-plush-code)
-           (not (empty? needed-close-paren-stack)))
-      (recur (if (= (first needed-close-paren-stack) :plush-close-open)
-               (vec (concat plush-open-close-vector (list :plush-close :plush-open)))
-               (conj plush-open-close-vector :plush-close))
-             remaining-plush-code
-             (dec code-block-depth)
-             (rest needed-close-paren-stack))
+  [plush-code]
+  (let [close-instr (i/get-instruction :close)]
+    (loop [push ()
+           plush (mapcat #(if-let [needs-open (or (nil? (:code-blocks %))
+                                                  (zero? (:code-blocks %)))]
+                            [%]
+                            [% [:plush-open (:code-blocks %)]])
+                         (load-instructions plush-code))]
+      (cond
+        ; If done with plush but unclosed opens, recur with one more close.
+        (and (empty? plush)
+             (some opener? push))
+        (recur push (list close-instr))
 
-      ; Check if done
-      (and (empty? remaining-plush-code)
-           (empty? needed-close-paren-stack))
-      (open-close-vec-to-push plush-open-close-vector)
+        ; If done with plush and all opens closed, return push.
+        (empty? plush)
+        push
 
-      :else
-      (let [atom (first remaining-plush-code)
-            n-code-blocks-opened (if (= (a/recognize-atom-type atom) :instruction)
-                                   (:code-blocks atom)
-                                   0)]
-        (if (is-close-atom atom)
-          (recur (if (empty? needed-close-paren-stack)
-                   plush-open-close-vector
-                   (if (= (first needed-close-paren-stack) :plush-close-open)
-                     (vec (concat plush-open-close-vector (list :plush-close :plush-open)))
-                     (conj plush-open-close-vector :plush-close)))
-                 (rest remaining-plush-code)
-                 (dec code-block-depth)
-                 (rest needed-close-paren-stack))
-          (recur (if (pos? n-code-blocks-opened)
-                   (vec (concat plush-open-close-vector (list atom :plush-open)))
-                   (conj plush-open-close-vector atom))
-                 (rest remaining-plush-code)
-                 (+ code-block-depth n-code-blocks-opened)
-                 (if (pos? n-code-blocks-opened)
-                   (concat (repeat (dec n-code-blocks-opened)
-                                   :plush-close-open)
-                           (list :plush-close)
-                           needed-close-paren-stack)
-                   needed-close-paren-stack)))))))
+        :else
+        (let [i (first plush)]
+          (cond
+            ; If next instruction is a close, and there is an open.
+            (and (= i close-instr)
+                 (some opener? push))
+            (recur (let [post-open (reverse (take-while (comp not opener?)
+                                                        (reverse push)))
+                         open-index (- (count push) (count post-open) 1)
+                         num-open (second (nth push open-index))
+                         pre-open (take open-index push)]
+                     (if (= 1 num-open)
+                       (concat pre-open [post-open])
+                       (concat pre-open [post-open [:plush-open (dec num-open)]])))
+                   (rest plush))
+
+            ; If next instruction is a close, and there is no open.
+            (= i close-instr)
+            (recur push (rest plush))
+
+            :else
+            (recur (concat push [i])
+                   (rest plush))))))))
+
+
+
+(defn instruction-set-docs-to-html
+  []
+  (hp/html5 [:head (hp/include-css "css/default.css")]
+            [:body
+             (list
+                   [:div#header
+                    [:h1
+                     [:a {:href "index.html"}
+                      [:span.project-title
+                       [:span.project-name "Plushi Documentation"]]]]]
+                   [:div#content.namespace-docs {:style "left:0px;"}
+                    (list [:h2#top.anchor "Instruction Set"]
+                          [:pre.doc "Documentation on the supported instructions of the plushi interpreter."]
+                          (for [i (sort #(compare (:name %1) (:name %2))
+                                        (vals @i/instruction-set))]
+                            [:div#var-image.public.anchor
+                             (list [:h3 (:name i)]
+                                   [:div.usage
+                                    [:code (str "Input Types: " (pr-str (:input-types i)))]
+                                    [:code (str "Output Types: " (pr-str (:output-types i)))]]
+                                   [:div.doc
+                                    [:pre.plaintext (:docstring i)]])]))])]))

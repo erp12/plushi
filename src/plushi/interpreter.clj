@@ -11,7 +11,7 @@
   "A set of push types supported by the interpreter. This set is computed based
   on types manipulated by the set of registered instructions."
   (set (concat (instr/get-supported-types)
-               [:exec :tag])))
+               [:exec])))
 
 
 (defn load-program
@@ -150,6 +150,10 @@
                      (load-inputs inputs))
            steps 0
            stop-time (+' (System/nanoTime) (:runtime-limit @c/lang-constraints))]
+      (if (and verbose (zero? steps))
+        (do
+          (println "\nInitial state:")
+          (state/pretty-print state)))
       (if (or (empty? (:exec state))
               (> steps (:atom-limit @c/lang-constraints))
               (> (System/nanoTime) stop-time))
