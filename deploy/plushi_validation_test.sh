@@ -4,7 +4,13 @@
 prog=`cat resources/simple_program.json | tr -d '[:space:]'`
 data=`cat resources/data.json | tr -d '[:space:]'`
 
+
+
 echo $prog
 echo $data
 
-lein run -R $prog -D $data -f json
+lein run --start
+
+curl \
+  --request POST 'http://localhost/Service' \
+  --data ""

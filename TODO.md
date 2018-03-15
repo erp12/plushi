@@ -2,7 +2,7 @@
 
 ## High Priority
 
-- [ ] Fix doc generation.
+- [x] Fix doc generation.
 - [ ] Fix validation test.
 - [ ] Denote types of instructions which return state
 - [ ] Denote types of instructions which noop
@@ -18,8 +18,9 @@
 - [ ] Finish common instructions
 - [ ] Finish code instructions
 - [ ] Random instructions
+- [ ] Allow for specifying the port number
 
 
 # Future Features
 
-- [ ] Allow for lang-constraints to be set via CLI
+- [ ] Allow for lang-constraints to be set via request

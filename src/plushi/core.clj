@@ -83,6 +83,10 @@
 
 (def cli-options
   [["-s" "--start" "Start the Plushi server."]
+  ["-p" "--port PORT" "Port number. Default is 8075."
+   :default 8075
+   :parse-fn #(Integer/parseInt %)
+   :validate [#(< 0 % 0x10000) "Must be a number between 0 and 65536"]]
    ["-d" "--docs PATH" "Generates an html file documenting the instruction set."]
    ["-h" "--help"]])
 
@@ -104,7 +108,7 @@
 
       ;; If the user is trying to get the set of supported instructions.
       (not (nil? (:start cli-opts)))
-      (run-jetty plushi-server {:port 8080})
+      (run-jetty plushi-server {:port (:port cli-opts)})
 
       ;; If the user is generating instruction set documentation
       (not (nil? (:docs cli-opts)))
