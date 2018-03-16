@@ -50,7 +50,6 @@
 
 (defn handler [request]
   (let [request-body (json/read-str (get request :body) :key-fn keyword)]
-    (println request-body)
     (response
       (cond
         (= "instructions" (:action request-body))
