@@ -94,7 +94,7 @@
 
 
 (defn instruction-set-docs-to-html
-  []
+  [instruction-set]
   (hp/html5 [:head (hp/include-css "css/default.css")]
             [:body
              (list
@@ -107,7 +107,7 @@
                     (list [:h2#top.anchor "Instruction Set"]
                           [:pre.doc "Documentation on the supported instructions of the plushi interpreter."]
                           (for [i (sort #(compare (:name %1) (:name %2))
-                                        (vals @i/instruction-set))]
+                                        (vals instruction-set))]
                             [:div#var-image.public.anchor
                              (list [:h3 (:name i)]
                                    [:div.usage

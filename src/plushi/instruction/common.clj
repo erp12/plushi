@@ -1,6 +1,7 @@
 (ns plushi.instruction.common
   (:require [plushi.instruction :as i]
-            [plushi.state :as state]))
+            [plushi.state :as state]
+            [plushi.utils :as u]))
 
 
 (defn register-common
@@ -16,7 +17,7 @@
                 [type-kw] [type-kw type-kw] 0)
 
     (i/register (str type-str "_dup_times")
-                (fn [x n] [(repeat n x)])
+                (fn [x n] [(u/ensure-list (repeat n x))])
                 [type-kw :integer] [:exec] 0)
     ))
 
