@@ -32,45 +32,40 @@
 
 ;; Server Functions
 
-(defn instruction-set-response
+(defn instruction-set-response-body
   [{:keys [arity docstrings] :or {arity 0 docstrings false}}]
   (do
     (instr-io/register-input-instructions arity)
-    (response (prepare-instruction-set (instr/get-supported-instructions)
-                                       docstrings))))
+    (prepare-instruction-set (instr/get-supported-instructions) docstrings)))
 
 
-(defn supported-types-response
-  []
-  (response (instr/get-supported-types)))
-
-
-(defn run-program-response
+(defn run-program-response-body
   [{:keys [code arity output-types dataset verbose] :or {verbose false}}]
+  (instr-io/register-input-instructions arity)
   (let [dataset (ds/json-data-to-dataset dataset)
         push-program (t/plush-to-push code)
         output-types (map keyword output-types)]
-    (instr-io/register-input-instructions arity)
-    (response (run-on-dataset push-program output-types dataset verbose))))
+    (run-on-dataset push-program output-types dataset verbose)))
 
 
 (defn handler [request]
   (let [request-body (json/read-str (get request :body) :key-fn keyword)]
-    (println (dissoc request-body :dataset))
-    (cond
-      (= "instructions" (:action request-body))
-      (instruction-set-response request-body)
+    (println request-body)
+    (response
+      (cond
+        (= "instructions" (:action request-body))
+        (instruction-set-response-body request-body)
 
-      (= "types" (:action request-body))
-      (supported-types-response)
+        (= "types" (:action request-body))
+        (instr/get-supported-types)
 
-      (= "run" (:action request-body))
-      (run-program-response request-body)
+        (= "run" (:action request-body))
+        (run-program-response-body request-body)
 
-      (= "shutdown" (:action request-body))
-      (System/exit 0)
+        (= "shutdown" (:action request-body))
+        (System/exit 0)
 
-      )))
+        ))))
 
 
 (def plushi-server

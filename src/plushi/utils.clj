@@ -14,8 +14,12 @@
   [x]
   (cond
     (list? x) x
+
+    (or (instance? clojure.lang.LazySeq x)
+        (instance? clojure.lang.Repeat x))
+    (apply list x)
+
     (vector? x) (vector-to-list x)
-    (instance? clojure.lang.LazySeq x) (apply list x)
     (coll? x) (into '() x)
     :else (list x)))
 
