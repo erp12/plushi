@@ -3,8 +3,8 @@
 [![CircleCI](https://circleci.com/gh/erp12/plushi.svg?style=svg)](https://circleci.com/gh/erp12/plushi)
 
 
-Plushi is a language agnostic push interpreter capable of running push programs
-via JSON/EDN interface.
+Plushi is an embadable language agnostic push interpreter capable of running
+push programs via JSON interface.
 
 Push is a programming language designed for AI systems to write software in.
 It has virtually no syntax and supports all common data types and can express
@@ -22,77 +22,169 @@ For easy integration with Clojure projects, a public clojars release coming soon
 
 ## Usage
 
-### Standalone
+The Plushi interpreter is wrapped in an HTTP server written using [ring](https://github.com/ring-clojure/ring).
+Any environment capable of making POST requests can use Plushi. JVM languages
+can also attempt to use plushi via inerop, although this is not the primary
+design goal.
 
-Currently, plushi is a tool that is meant to be used as a standalone jar, however
-it is expected that this will most commonly be done via system calls from inside
-other programs.
+### The Standalone jar
 
-$ java -jar plushi-0.1.0-standalone.jar [args]
+See the releases page for downloads of the standalone jar file.
 
-Send complex data structures to plushi from another context, serialized data
-sturctures such as JSON and EDN are used. For more information on how to used
-the plushi standalone with various arguments, see the Options section of the
-README and the introduction documentation topic.
+To build your own standalone jar, clone the repository and run the following
+[leiningen](https://leiningen.org/) commands.
 
+```
+lein deps
+lein uberjar
+```
 
-### Clojure
+### Starting the Plushi Server
 
-Plushi can also be used as a Clojure library for easy integration with Clojure
-projects. For more information see with documentation on this topic.
+To start the plushi HTTP server, simply run the jar with the `--start` flag.
 
-### Python
+```sh
+java -jar plushi-0.1.0-standalone.jar --start
+# or
+$ java -jar plushi-0.1.0-standalone.jar -s
+```
 
-A python interface using Py4j might be in this project's future, but it is not
-currently being worked on. In the meantime, you can run plushi from Python
-using the standalone jar and system calls.
+The default port is `8075`. To specify the port number, supply the `--port` flag
+followed by a valid port number.
 
-If you would like to help integrate plushi and python (or any other language)
-consider contributing!
+```sh
+java -jar plushi-0.1.0-standalone.jar --start --port 8076
+# or
+$ java -jar plushi-0.1.0-standalone.jar -s -p 8076
+```
 
+## Request Actions
 
-## Options
+All of the actions required to synthesis plushi programs are available via POST
+requests to the plushi HTTP server. Other applications can send JSON blobs that
+describe what action the plushi server should take.
 
-### --instruction-set, -I
+### Getting the Supported Instructions
 
-Returns a serialized object desciribing the instructions which are supported by the interpreter. The serialized list will be encoded using the format specified by `--format`.
+The Plushi interpreter supports a set of instructions which can appear in
+programs along side literals (ints, floats, strings, booleans). These instructions
+and literals in a linear sequence is a "plush program" which can be executed by
+the plushi interpreter.
 
-The returned serialized object includes instruction names, the types of values they accept as input, and the types of values they produce as output. Users can create program by assembling serialzied programs out of the instructions which are relavent to their system.
+To request the Plushi instruction set, the JSON blob in the request body must
+have 2 keys: `"action"` and `"arity"`. The value of the `"action"` key must
+be `"instructions"` and the value of the `"arity"` key should be an integer
+denoting how many inputs the programs you would like to generate will accept.
 
-To include instructions which processs inputs, the `--arity` argument must be specified.
+Below is an example of this in python.
 
-### --supported-types, -T
+```py
+import json, requests
+instr_set = requests.post("http://localhost:8075/", json=json.dumps({
+  'action': 'instructions',
+  'arity': arity
+})).json()
+```
 
-Returns a serialized list of push types which are supported by the interpreter. The serialized list will be encoded using the format specified by `--format`.
+### Getting the Supported Types
 
-### --run, -R
+Depending on what kinds of programs you intend on synthesizing, it maybe be
+helful to know what kinds of data types the Plushi interpreter is capable of
+manipulating. The `"types"` action returns this information on requst.
 
-Must be followed by a serialized program. Returns the result of running the program. Result will be returned in the format specified by `--format`.
+Below is an example of this in python.
 
-Requires the `--inputs` argument also be specified.
+```py
+import json, requests
+plushi_types = requests.post("http://localhost:8075/",
+                             json=json.dumps({'action': 'types'})).json()
+```
 
-### --dataset, -D
+### Running a Plushi Program
 
-Must be followed by a serialized dataset of inputs to the push program. Serialization should be in the format specified by `--format`.
+If the value associated with the `"action"` key is `"run"` then Plushi will
+expect to be running a given plush program.
 
-### --format, -f
+Below is an example of request made through python. All of the required and
+optional values are described in detail in the paragraphs below.
 
-Denotes the file format to use for communication. Supported formats are given in
-the below table
+```py
+import json, requests
+X = json.load("data.json")
+request_body = {
+  'action': 'run',
+  'code': [1, 2, "plushi:integer_add"],
+  'arity': 1,
+  'output-types': ['integer'],
+  'dataset': X
+}
+outputs = requests.post("http://localhost:8075/",
+                        json=json.dumps(request_body)).json()
+```
 
-| Format | Link                              | Status         |
-| ------ | --------------------------------- | -------------- |
-| json   | https://www.json.org/             | Supported      |
-| edn    | https://github.com/edn-format/edn | In Development |
+#### `"code"`
 
-### --arity, -a
+The value for the `"code"` key should be a flat list containing valid plushi atoms.
+A valid plushi atom can be any of the following:
 
-Must be followed by a non-negative integer denoting the number of input values that is required to run the program.
+- an integer
+- a float
+- a boolean
+- a string
 
+If a string atom is equal to a name of any instruction (ie `"plushi:float_mult"`)
+Plushi will assume that the atom at that position should be the instruction.
+Otherwise the string (or any other atom) will be assumed to be a literal.
+
+Unlike other implemenations of the the Push language, Plushi programs are always
+linear. Certain instructions (ie. `exec_if`) assume that the subsequent atom is
+a nested Push expression (or "code block"). Plushi has a dedicated instruction
+called `close` which denotes the closing of a code block. Using these instructions
+a linear Plushi program can be translated into a traditional, executable Push
+program. If no code blocks are open, the `close` instructions are a noop. 
+
+#### `"arity"`
+
+An integer denoting how many inputs the program specified by `"code"` will expect. This is also the number of features in the dataset.
+
+#### `"output-types"`
+
+A list of plushi types to return after program execution. If more than one value
+of a certain type should be output, that type name should appear in the list
+multiple times.
+
+For example a program which returns two integer and a string should set the
+`"output-types"` value to `["integer", "integer", "string"]`.
+
+### `"dataset"`
+
+Plushi is designed to be used inside of inductive machine learning frameworks.
+Thus, it is expected that each program will need to be run on an entire dataset
+of inputs for evaluation.
+
+The value of the `"dataset"` key is expected to be a list of JSON objects.
+Each JSON object is one record in the dataset with the keys being feature names
+and values being feature values.
+
+```JSON
+[
+  {"name" : "Alice", "age": 31},
+  {"name" : "Bob", "age": 45},
+  {"name" : "Cathy", "age": 24},
+]
+
+```
+
+> The dataset should not contain the training label you are trying to predict.
+> Currently Plushi only requires you specify the arity of the program, not the
+> names of which feature to use, and thus Plushi may  use your label as an input
+> by mistake.
 
 ## Examples
 
-More in depth examples can be found on the documenation page.
+Below is a list of other projects which use Plushi:
+
+- [plushi-annealing](https://github.com/erp12/plushi-annealing) - A simple simulated annealing algorithm for synthesizing Plushi programs.
 
 
 ## Contributing
