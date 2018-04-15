@@ -53,6 +53,12 @@
     (register (make-instruction name function input-types output-types code-blocks docstring))))
 
 
+(defn unregister
+  "Given an instruction name, remove the instruction from the instruction set."
+  [instruction-name]
+  (swap! instruction-set dissoc (keyword instruction-name)))
+
+
 (defn get-supported-instructions
   "Returns all (or a subset) of the registered instructions in the
   instruction-set atom.

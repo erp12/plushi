@@ -24,23 +24,27 @@
   [instruction-set include-docstrings]
   (vec (map #(-> (assoc % :name (str "plushi:" (:name %)))
                  (dissoc :function)
+                 (dissoc :code-blocks)
                  ((fn [i]
                     (if include-docstrings
                       i
-                      (dissoc i :docstring)))))
-            instruction-set)))
+                      (-> (dissoc i :docstring)))))
+            instruction-set))))
+
 
 ;; Server Functions
 
 (defn instruction-set-response-body
   [{:keys [arity docstrings] :or {arity 0 docstrings false}}]
   (do
+    (instr-io/remove-input-instructions)
     (instr-io/register-input-instructions arity)
     (prepare-instruction-set (instr/get-supported-instructions) docstrings)))
 
 
 (defn run-program-response-body
   [{:keys [code arity output-types dataset verbose] :or {verbose false}}]
+  (instr-io/remove-input-instructions)
   (instr-io/register-input-instructions arity)
   (let [dataset (ds/json-data-to-dataset dataset)
         push-program (t/plush-to-push code)
@@ -59,12 +63,7 @@
         (instr/get-supported-types)
 
         (= "run" (:action request-body))
-        (run-program-response-body request-body)
-
-        (= "shutdown" (:action request-body))
-        (System/exit 0)
-
-        ))))
+        (run-program-response-body request-body)))))
 
 
 (def plushi-server

@@ -19,8 +19,15 @@
          (range num-inputs))))
 
 
+(defn remove-input-instructions
+  "Removes all input instructions from the instruction set."
+  []
+  (doall
+    (map #(i/unregister (:name %))
+         (i/get-supported-instructions :all #"input_."))))
+
+
 (defn register-print-instruction
-  ""
   [type-kw]
   (let [type-str (name type-kw)]
     (i/register (str type-str "_print")
