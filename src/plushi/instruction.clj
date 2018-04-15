@@ -103,4 +103,4 @@
 
 
 (use
-  '(plushi.instruction io code numeric text common))
+  '(plushi.instruction io code common numeric text logical))
