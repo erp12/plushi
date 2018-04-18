@@ -17,17 +17,20 @@
     ;; Getting characters
 
     (i/register (str type-str "_from_first_char")
-                #(first %)
+                #(if (empty? %) :REVERT (first %))
                 [:string] [type-kw] 0
                 (str "Pushes a " type-str " of the first character of the top string."))
 
     (i/register (str type-str "_from_last_char")
-                #(last %)
+                #(if (empty? %) :REVERT (last %))
                 [:string] [type-kw] 0
                 (str "Pushes a " type-str " of the last character of the top string."))
 
     (i/register (str type-str "_from_nth_char")
-                #(nth %1 (mod %2 (count %1)))
+                (fn [s i]
+                  (if (empty? s)
+                    :REVERT
+                    (nth s (mod i (count s)))))
                 [:string :integer] [type-kw] 0
                 (str "Pushes a " type-str " of the nth character of the top string. The top integer denotes nth position."))
 
