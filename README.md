@@ -15,7 +15,15 @@ To read more about the push language, see the [Push Redux](https://erp12.github.
 
 ## Installation
 
-Download from https://github.com/erp12/plushi/releases.
+Download the standalone jar from https://github.com/erp12/plushi/releases.
+
+To build your own standalone jar, clone the repository and run the following
+[leiningen](https://leiningen.org/) commands.
+
+```
+lein deps
+lein uberjar
+```
 
 For easy integration with Clojure projects, a public clojars release coming soon!
 
@@ -27,17 +35,6 @@ Any environment capable of making POST requests can use Plushi. JVM languages
 can also attempt to use plushi via inerop, although this is not the primary
 design goal.
 
-### The Standalone jar
-
-See the releases page for downloads of the standalone jar file.
-
-To build your own standalone jar, clone the repository and run the following
-[leiningen](https://leiningen.org/) commands.
-
-```
-lein deps
-lein uberjar
-```
 
 ### Starting the Plushi Server
 
@@ -141,7 +138,7 @@ linear. Certain instructions (ie. `exec_if`) assume that the subsequent atom is
 a nested Push expression (or "code block"). Plushi has a dedicated instruction
 called `close` which denotes the closing of a code block. Using these instructions
 a linear Plushi program can be translated into a traditional, executable Push
-program. If no code blocks are open, the `close` instructions are a noop. 
+program. If no code blocks are open, the `close` instructions are a noop.
 
 #### `"arity"`
 
@@ -166,13 +163,12 @@ The value of the `"dataset"` key is expected to be a list of JSON objects.
 Each JSON object is one record in the dataset with the keys being feature names
 and values being feature values.
 
-```JSON
+```json
 [
   {"name" : "Alice", "age": 31},
   {"name" : "Bob", "age": 45},
   {"name" : "Cathy", "age": 24},
 ]
-
 ```
 
 > The dataset should not contain the training label you are trying to predict.

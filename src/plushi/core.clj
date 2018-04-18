@@ -25,11 +25,11 @@
   (vec (map #(-> (assoc % :name (str "plushi:" (:name %)))
                  (dissoc :function)
                  (dissoc :code-blocks)
-                 ((fn [i]
+                 ((fn [instr-map]
                     (if include-docstrings
-                      i
-                      (-> (dissoc i :docstring)))))
-            instruction-set))))
+                      instr-map
+                      (dissoc instr-map :docstring)))))
+            instruction-set)))
 
 
 ;; Server Functions
@@ -85,7 +85,6 @@
 
 
 (defn -main
-  "I don't do a whole lot ... yet."
   [& args]
   (let [cli-map (parse-opts args cli-options)
         ;; _ (println cli-map)
