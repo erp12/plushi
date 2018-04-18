@@ -59,7 +59,7 @@
     (first (char-array x))
 
     :else
-    (throw (Exception. (str "Cannot coerce " (str x) " to char")))))
+    (throw (Exception. (str "Cannot coerce " x " to char")))))
 
 
 (defn keyword-to-str

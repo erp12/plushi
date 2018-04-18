@@ -44,7 +44,15 @@
 
 (defn register
   "Given an instruction, or the necessary components to make an instruction,
-  add a key-value pair to the instruction-set atom."
+  add a key-value pair to the instruction-set atom.
+
+  Instructin components:
+  - Name should be a unique string with respect to the other instructions in the instruction set.
+  - Function can be any clojure function.
+  - input-types is either the keyword :STATE or a vector of stack types.
+  - output-types is either the keyword :STATE or a vector of stack types.
+  - code-blocks is the number of code blocks that follow the instruction.
+  - docstring (optional) is a string explaining what the instruction does."
   ([instruction]
     (swap! instruction-set assoc (keyword (:name instruction)) instruction))
   ([name function input-types output-types code-blocks]
@@ -103,4 +111,4 @@
 
 
 (use
-  '(plushi.instruction io code numeric text common))
+  '(plushi.instruction io code common numeric text logical))

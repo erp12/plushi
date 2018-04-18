@@ -17,17 +17,20 @@
     ;; Getting characters
 
     (i/register (str type-str "_from_first_char")
-                #(first %)
+                #(if (empty? %) :REVERT (first %))
                 [:string] [type-kw] 0
                 (str "Pushes a " type-str " of the first character of the top string."))
 
     (i/register (str type-str "_from_last_char")
-                #(last %)
+                #(if (empty? %) :REVERT (last %))
                 [:string] [type-kw] 0
                 (str "Pushes a " type-str " of the last character of the top string."))
 
     (i/register (str type-str "_from_nth_char")
-                #(nth %1 (mod %2 (count %1)))
+                (fn [s i]
+                  (if (empty? s)
+                    :REVERT
+                    (nth s (mod i (count s)))))
                 [:string :integer] [type-kw] 0
                 (str "Pushes a " type-str " of the nth character of the top string. The top integer denotes nth position."))
 
@@ -67,44 +70,58 @@
 
 ;; Substring instructions
 
+
+(defn- p-subs
+  ([s start]
+   (p-subs s start (count s)))
+  ([s start end]
+   (let [p-start (-> (max start 0)
+                     (min (count s)))
+         p-end (-> (max end 0)
+                   (min (count s)))]
+     (if (< p-start p-end)
+       (subs s p-start p-end)
+       (subs s p-end p-start)))))
+
+
 (i/register "string_substring"
-            #(subs %1 (min %2 %3) (max %2 %3))
+            #(p-subs %1 %2 %3)
             [:string :integer :integer] [:string] 0
             "Pushes a substring of the top string based on the top two integers.")
 
 
 (i/register "string_head"
-            #(subs %1 0 %2)
+            #(p-subs %1 0 %2)
             [:string :integer] [:string] 0
             "Pushes a string of the first n characters from the top string. N is the top integer.")
 
 
 (i/register "string_tail"
-            #(subs %1 (- (count %1) %2))
+            #(p-subs %1 (- (count %1) %2))
             [:string :integer] [:string] 0
             "Pushes a string of the last n characters from the top string. N is the top integer.")
 
 
 (i/register "string_drop_head"
-            #(subs %1 %2)
+            #(p-subs %1 %2)
             [:string :integer] [:string] 0
             "Pushes the top string without the first n characters. N is the top integer.")
 
 
 (i/register "string_drop_tail"
-            #(subs %1 0 (- (count %1) %2))
+            #(p-subs %1 0 (- (count %1) %2))
             [:string :integer] [:string] 0
             "Pushes the top string without the last n characters. N is the top integer.")
 
 
 (i/register "string_drop_first"
-            #(subs %1 1 (count %1))
+            #(p-subs %1 1 (count %1))
             [:string] [:string] 0
             "Pushes the top string without the first character. N is the top integer.")
 
 
 (i/register "string_drop_last"
-            #(subs %1 0 (dec (count %1)))
+            #(p-subs %1 0 (dec (count %1)))
             [:string] [:string] 0
             "Pushes the top string without the last character. N is the top integer.")
 

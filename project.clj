@@ -1,4 +1,4 @@
-(defproject plushi "0.1.0"
+(defproject plushi "0.2.0-SNAPSHOT"
   :description "A language agnostic Plush language interpreter."
   :url "https://github.com/erp12/plushi"
   :license {:name "Eclipse Public License"

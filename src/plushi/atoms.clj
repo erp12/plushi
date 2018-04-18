@@ -21,8 +21,8 @@
   corresponding predicate (:pred key) and coerce-ing function (:coerce key)."
   {:list {:pred list? :coerce u/ensure-list}
    :char {:pred char? :coerce u/coerce-to-char}
-   :integer {:pred int? :coerce #(c/constrain-integer (int %))}
-   :float {:pred float? :coerce #(c/constrain-float (float %))}
+   :integer {:pred int? :coerce #(c/constrain-integer (unchecked-int %))}
+   :float {:pred float? :coerce #(c/constrain-float (unchecked-float %))}
    :boolean {:pred boolean? :coerce boolean}
    :string {:pred string? :coerce #(c/constrain-string (str %))}})
 

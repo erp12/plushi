@@ -1,6 +1,5 @@
 (ns plushi.instruction.code
-  (:require [plushi.instruction :as i]
-            [plushi.state :as state]))
+  (:require [plushi.instruction :as i]))
 
 
 (i/register "close"
@@ -25,6 +24,6 @@
             (fn [b then else]
               (if b then else))
             [:boolean :exec :exec] [:exec] 2
-            "If the top boolean is true, implement execute the top element of the
-            exec stack and skip the second. Otherwise, skip the top element of the
+            "If the top boolean is true, execute the top element of the exec
+            stack and skip the second. Otherwise, skip the top element of the
             exec stack and execute the second.")
