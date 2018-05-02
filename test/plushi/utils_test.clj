@@ -45,6 +45,9 @@
            [1 3 2]))))
 
 
+;; coerce-to-char
+
+
 (deftest keyword-to-str-stndrd
   (testing "Standard call to keyword-to-str"
     (is (= (keyword-to-str :foo)

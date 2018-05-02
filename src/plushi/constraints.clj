@@ -7,7 +7,7 @@
   "Clojure atom containing a map of constraints."
   (atom
     {;; DATA TYPE CONSTRAINTS
-     :max-number-magnitude 1000000000000
+     :max-number-magnitude 1000000000
      :min-number-magnitude 1.0E-10
      :max-string-length 5000
      :max-vector-length 5000

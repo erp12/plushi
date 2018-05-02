@@ -51,6 +51,7 @@
     1. The push state the top items for each arg-type popped off.
     2. A vector of the values popped from each stack to be used as instruction arguments."
   [state arg-types]
+  ; (println arg-types)
   (loop [remaining-arg-types arg-types
          s state
          args []]
@@ -70,6 +71,7 @@
   returned values can be coerced into their expected stack type and push them
   onto the stack. Return the resulting stack."
   [state returned-values expected-types]
+  ; (println returned-values expected-types)
   (let [items-to-push (map #(if (contains? a/type-lookup %2) (a/coerce-atom-type %1 %2) %1)
                            returned-values
                            expected-types)]
@@ -87,7 +89,9 @@
 
 (defn- evaluate-atom
   [state atom]
+  ; (println atom)
   (let [atom-type (a/recognize-atom-type atom)]
+    ;(println "Evaluating:" (if (= :instruction atom-type) (:name atom) atom))
     (cond
       (= atom-type :list)
         (assoc state :exec (concat atom (get state :exec)))
